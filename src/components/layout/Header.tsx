@@ -5,7 +5,7 @@ import { useFormData } from '@/context/FormDataContext'
 import { useToast } from '@/hooks/use-toast'
 
 export function Header() {
-  const { saveToStorage, clearAllData, isDirty, lastSaved } = useFormData()
+  const { saveToStorage, clearAllData, lastSaved } = useFormData()
   const { toast } = useToast()
 
   const handleSave = () => {

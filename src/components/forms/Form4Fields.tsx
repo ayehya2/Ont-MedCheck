@@ -1181,7 +1181,7 @@ export function Form4Fields() {
                   <Input 
                     value={med.drugName} 
                     onChange={(e) => {
-                      const newMeds = [form4.medications || []]
+                      const newMeds = [...(form4.medications || [])]
                       newMeds[index] = { ...med, drugName: e.target.value }
                       updateForm4('medications', newMeds)
                     }}
@@ -1193,7 +1193,7 @@ export function Form4Fields() {
                   <Input 
                     value={med.strength} 
                     onChange={(e) => {
-                      const newMeds = [form4.medications || []]
+                      const newMeds = [...(form4.medications || [])]
                       newMeds[index] = { ...med, strength: e.target.value }
                       updateForm4('medications', newMeds)
                     }}
@@ -1204,7 +1204,7 @@ export function Form4Fields() {
                   <Input 
                     value={med.dosageForm} 
                     onChange={(e) => {
-                      const newMeds = [form4.medications || []]
+                      const newMeds = [...(form4.medications || [])]
                       newMeds[index] = { ...med, dosageForm: e.target.value }
                       updateForm4('medications', newMeds)
                     }}
@@ -1217,7 +1217,7 @@ export function Form4Fields() {
                     <Input 
                       value={med.directionsForUse} 
                       onChange={(e) => {
-                        const newMeds = [form4.medications || []]
+                        const newMeds = [...(form4.medications || [])]
                         newMeds[index] = { ...med, directionsForUse: e.target.value }
                         updateForm4('medications', newMeds)
                       }}
@@ -1227,7 +1227,7 @@ export function Form4Fields() {
                     <Input 
                       value={med.indication} 
                       onChange={(e) => {
-                        const newMeds = [form4.medications || []]
+                        const newMeds = [...(form4.medications || [])]
                         newMeds[index] = { ...med, indication: e.target.value }
                         updateForm4('medications', newMeds)
                       }}
@@ -1239,7 +1239,7 @@ export function Form4Fields() {
                         <Checkbox 
                           checked={med.adherenceIssue === 'yes'} 
                           onCheckedChange={(c) => {
-                            const newMeds = [form4.medications || []]
+                            const newMeds = [...(form4.medications || [])]
                             newMeds[index] = { ...med, adherenceIssue: c ? 'yes' : '' }
                             updateForm4('medications', newMeds)
                           }}
@@ -1250,7 +1250,7 @@ export function Form4Fields() {
                         <Checkbox 
                           checked={med.adherenceIssue === 'no'} 
                           onCheckedChange={(c) => {
-                            const newMeds = [form4.medications || []]
+                            const newMeds = [...(form4.medications || [])]
                             newMeds[index] = { ...med, adherenceIssue: c ? 'no' : '' }
                             updateForm4('medications', newMeds)
                           }}
@@ -1263,7 +1263,7 @@ export function Form4Fields() {
                     <Input 
                       value={med.rxOtcNhp} 
                       onChange={(e) => {
-                        const newMeds = [form4.medications || []]
+                        const newMeds = [...(form4.medications || [])]
                         newMeds[index] = { ...med, rxOtcNhp: e.target.value }
                         updateForm4('medications', newMeds)
                       }}
@@ -1276,7 +1276,7 @@ export function Form4Fields() {
                   <Textarea 
                     value={med.patientComments} 
                     onChange={(e) => {
-                      const newMeds = [form4.medications || []]
+                      const newMeds = [...(form4.medications || [])]
                       newMeds[index] = { ...med, patientComments: e.target.value }
                       updateForm4('medications', newMeds)
                     }}
@@ -1288,7 +1288,7 @@ export function Form4Fields() {
                   <Textarea 
                     value={med.pharmacistNotes} 
                     onChange={(e) => {
-                      const newMeds = [form4.medications || []]
+                      const newMeds = [...(form4.medications || [])]
                       newMeds[index] = { ...med, pharmacistNotes: e.target.value }
                       updateForm4('medications', newMeds)
                     }}
@@ -1300,7 +1300,7 @@ export function Form4Fields() {
                   <Textarea 
                     value={med.commentsForRecord} 
                     onChange={(e) => {
-                      const newMeds = [form4.medications || []]
+                      const newMeds = [...(form4.medications || [])]
                       newMeds[index] = { ...med, commentsForRecord: e.target.value }
                       updateForm4('medications', newMeds)
                     }}
@@ -1315,7 +1315,7 @@ export function Form4Fields() {
                 variant="outline" 
                 size="sm"
                 onClick={() => {
-                  const newMeds = [form4.medications || [], createEmptyForm4Medication()]
+                  const newMeds = [...(form4.medications || []), createEmptyForm4Medication()]
                   updateForm4('medications', newMeds)
                 }}
                 className="gap-1"
@@ -1348,7 +1348,7 @@ export function Form4Fields() {
                   <Textarea 
                     value={med.nameStrengthFormDirections} 
                     onChange={(e) => {
-                      const newMeds = [form4.discontinuedMedications || []]
+                      const newMeds = [...(form4.discontinuedMedications || [])]
                       newMeds[index] = { ...med, nameStrengthFormDirections: e.target.value }
                       updateForm4('discontinuedMedications', newMeds)
                     }}
@@ -1360,7 +1360,7 @@ export function Form4Fields() {
                   <Textarea 
                     value={med.notes} 
                     onChange={(e) => {
-                      const newMeds = [form4.discontinuedMedications || []]
+                      const newMeds = [...(form4.discontinuedMedications || [])]
                       newMeds[index] = { ...med, notes: e.target.value }
                       updateForm4('discontinuedMedications', newMeds)
                     }}
@@ -1375,7 +1375,7 @@ export function Form4Fields() {
                 variant="outline" 
                 size="sm"
                 onClick={() => {
-                  const newMeds = [form4.discontinuedMedications || [], createEmptyForm4DiscontinuedMed()]
+                  const newMeds = [...(form4.discontinuedMedications || []), createEmptyForm4DiscontinuedMed()]
                   updateForm4('discontinuedMedications', newMeds)
                 }}
                 className="gap-1"
@@ -1408,7 +1408,7 @@ export function Form4Fields() {
                   <Input 
                     value={issue.issue} 
                     onChange={(e) => {
-                      const newIssues = [form4.therapeuticIssues || []]
+                      const newIssues = [...(form4.therapeuticIssues || [])]
                       newIssues[index] = { ...issue, issue: e.target.value }
                       updateForm4('therapeuticIssues', newIssues)
                     }}
@@ -1420,7 +1420,7 @@ export function Form4Fields() {
                   <Textarea 
                     value={issue.suggestedTherapy} 
                     onChange={(e) => {
-                      const newIssues = [form4.therapeuticIssues || []]
+                      const newIssues = [...(form4.therapeuticIssues || [])]
                       newIssues[index] = { ...issue, suggestedTherapy: e.target.value }
                       updateForm4('therapeuticIssues', newIssues)
                     }}
@@ -1432,7 +1432,7 @@ export function Form4Fields() {
                   <Textarea 
                     value={issue.actionTaken} 
                     onChange={(e) => {
-                      const newIssues = [form4.therapeuticIssues || []]
+                      const newIssues = [...(form4.therapeuticIssues || [])]
                       newIssues[index] = { ...issue, actionTaken: e.target.value }
                       updateForm4('therapeuticIssues', newIssues)
                     }}
@@ -1444,7 +1444,7 @@ export function Form4Fields() {
                   <Textarea 
                     value={issue.notes} 
                     onChange={(e) => {
-                      const newIssues = [form4.therapeuticIssues || []]
+                      const newIssues = [...(form4.therapeuticIssues || [])]
                       newIssues[index] = { ...issue, notes: e.target.value }
                       updateForm4('therapeuticIssues', newIssues)
                     }}
@@ -1459,7 +1459,7 @@ export function Form4Fields() {
                 variant="outline" 
                 size="sm"
                 onClick={() => {
-                  const newIssues = [form4.therapeuticIssues || [], createEmptyForm4TherapeuticIssue()]
+                  const newIssues = [...(form4.therapeuticIssues || []), createEmptyForm4TherapeuticIssue()]
                   updateForm4('therapeuticIssues', newIssues)
                 }}
                 className="gap-1"
