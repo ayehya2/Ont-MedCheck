@@ -8,7 +8,7 @@ interface Form3PDFProps {
 // Styles for Form 3 - Personal Medication Record
 const styles = StyleSheet.create({
   page: {
-    padding: 18,
+    padding: 14,
     fontSize: 7,
     fontFamily: 'Times-Roman',
     lineHeight: 1.2,
@@ -19,10 +19,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 6,
+    marginBottom: 3,
     borderBottomWidth: 1,
     borderBottomColor: '#000',
-    paddingBottom: 4
+    paddingBottom: 2
   },
   logo: {
     height: 25,
@@ -37,13 +37,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 14,
     fontFamily: 'Helvetica-Bold',
-    marginBottom: 6
+    marginBottom: 3
   },
   serviceRow: {
     flexDirection: 'row',
     borderWidth: 0.5,
     borderColor: '#999',
-    marginBottom: 6
+    marginBottom: 3
   },
   serviceCell: {
     flex: 1,
@@ -55,11 +55,11 @@ const styles = StyleSheet.create({
   },
   sectionHeader: {
     backgroundColor: '#D0D8E8',
-    padding: 4,
+    padding: 3,
     fontSize: 9,
     fontFamily: 'Helvetica-Bold',
-    marginTop: 6,
-    marginBottom: 3
+    marginTop: 2,
+    marginBottom: 1
   },
   fieldRow: {
     flexDirection: 'row',
@@ -89,14 +89,14 @@ const styles = StyleSheet.create({
   },
   cellValue: {
     fontSize: 8,
-    padding: 3,
+    padding: 2,
     backgroundColor: '#E8EEF7',
-    minHeight: 14
+    minHeight: 12
   },
   allergiesSection: {
     borderWidth: 0.5,
     borderColor: '#999',
-    marginTop: 4
+    marginTop: 2
   },
   allergiesLabel: {
     fontSize: 6,
@@ -108,14 +108,14 @@ const styles = StyleSheet.create({
   },
   allergiesValue: {
     fontSize: 7,
-    padding: 3,
-    minHeight: 18,
+    padding: 2,
+    minHeight: 14,
     backgroundColor: '#E8EEF7'
   },
   checkboxRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 3,
+    padding: 2,
     borderWidth: 0.5,
     borderColor: '#999',
     borderTopWidth: 0
@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
   },
   // Medication Table
   medicationTable: {
-    marginTop: 4,
+    marginTop: 2,
     borderWidth: 0.5,
     borderColor: '#999'
   },
@@ -155,13 +155,13 @@ const styles = StyleSheet.create({
   },
   medicationHeaderCell: {
     flex: 1,
-    padding: 3,
+    padding: 2,
     borderRightWidth: 0.5,
     borderRightColor: '#999'
   },
   medicationHeaderCellLast: {
     flex: 1,
-    padding: 3
+    padding: 2
   },
   medicationHeaderText: {
     fontSize: 7,
@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     borderTopWidth: 0.5,
     borderTopColor: '#999',
-    minHeight: 16
+    minHeight: 14
   },
   medicationCell: {
     flex: 1,
@@ -193,8 +193,8 @@ const styles = StyleSheet.create({
   },
   // Bottom section
   attentionBox: {
-    marginTop: 6,
-    padding: 4,
+    marginTop: 2,
+    padding: 3,
     backgroundColor: '#FFF',
     borderWidth: 0.5,
     borderColor: '#999'
@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
     lineHeight: 1.3
   },
   pharmacySection: {
-    marginTop: 4,
+    marginTop: 2,
     borderWidth: 0.5,
     borderColor: '#999'
   },

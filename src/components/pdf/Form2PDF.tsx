@@ -8,7 +8,7 @@ interface Form2PDFProps {
 // Styles specific to Form 2 - matching government form layout (PORTRAIT)
 const styles = StyleSheet.create({
   page: {
-    padding: 18,
+    padding: 16,
     fontSize: 7,
     fontFamily: 'Times-Roman',
     lineHeight: 1.2,
@@ -19,10 +19,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 6,
+    marginBottom: 4,
     borderBottomWidth: 1,
     borderBottomColor: '#000',
-    paddingBottom: 4
+    paddingBottom: 3
   },
   logo: {
     height: 25,
@@ -38,26 +38,26 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: 'Helvetica-Bold',
     textAlign: 'left',
-    marginBottom: 6,
+    marginBottom: 3,
     color: '#000000'
   },
   subtitle: {
     fontSize: 7,
     textAlign: 'left',
-    marginBottom: 10,
-    lineHeight: 1.3
+    marginBottom: 4,
+    lineHeight: 1.2
   },
   sectionHeader: {
     backgroundColor: '#D0D8E8',
-    padding: 4,
+    padding: 3,
     fontSize: 9,
     fontFamily: 'Helvetica-Bold',
-    marginTop: 6,
-    marginBottom: 3
+    marginTop: 2,
+    marginBottom: 2
   },
   row: {
     flexDirection: 'row',
-    marginBottom: 2
+    marginBottom: 1
   },
   fieldGroup: {
     flexDirection: 'row',
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     borderWidth: 1,
     borderColor: '#000000',
-    marginBottom: 2
+    marginBottom: 1
   },
   multiFieldCell: {
     flex: 1,
@@ -110,21 +110,21 @@ const styles = StyleSheet.create({
   },
   cellValue: {
     fontSize: 8,
-    padding: 3,
+    padding: 2,
     backgroundColor: '#E8EEF7',
-    minHeight: 14
+    minHeight: 12
   },
   paragraph: {
-    fontSize: 7,
-    marginBottom: 4,
-    lineHeight: 1.3,
+    fontSize: 8,
+    marginBottom: 2,
+    lineHeight: 1.2,
     textAlign: 'justify'
   },
   serviceCheckboxContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginBottom: 4,
-    marginTop: 2
+    marginBottom: 2,
+    marginTop: 1
   },
   serviceCheckboxItem: {
     flexDirection: 'row',
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
   checkboxRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 4,
+    marginBottom: 2,
     marginLeft: 4
   },
   checkbox: {
@@ -163,17 +163,17 @@ const styles = StyleSheet.create({
     fontSize: 6
   },
   checkboxLabel: {
-    fontSize: 7,
+    fontSize: 8,
     flex: 1
   },
   bulletPoint: {
-    fontSize: 7,
-    marginBottom: 3,
+    fontSize: 8,
+    marginBottom: 2,
     marginLeft: 8,
-    lineHeight: 1.3
+    lineHeight: 1.2
   },
   signatureSection: {
-    marginTop: 8,
+    marginTop: 3,
     flexDirection: 'row',
     borderWidth: 0.5,
     borderColor: '#999'
@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
     width: 100
   },
   commentsSection: {
-    marginTop: 4,
+    marginTop: 2,
     borderWidth: 0.5,
     borderColor: '#999'
   },
@@ -200,8 +200,8 @@ const styles = StyleSheet.create({
   },
   commentsValue: {
     fontSize: 8,
-    padding: 4,
-    minHeight: 40,
+    padding: 3,
+    minHeight: 25,
     backgroundColor: '#FFF'
   },
   footer: {
