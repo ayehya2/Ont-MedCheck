@@ -22,8 +22,12 @@ function MainApp() {
   // State for panel widths (percentage, min 30% max 70%)
   const [leftPanelWidth, setLeftPanelWidth] = useState(50)
   
+  // State for clinical notes height (pixels, min 200px max 800px)
+  const [clinicalNotesHeight, setClinicalNotesHeight] = useState(600)
+  
   // State for dragging
   const [isDragging, setIsDragging] = useState(false)
+  const [isDraggingVertical, setIsDraggingVertical] = useState(false)
   
   const handleMouseDown = () => {
     setIsDragging(true)
@@ -45,6 +49,25 @@ function MainApp() {
   
   const handleMouseUp = () => {
     setIsDragging(false)
+    setIsDraggingVertical(false)
+  }
+  
+  const handleVerticalMouseDown = () => {
+    setIsDraggingVertical(true)
+  }
+  
+  const handleVerticalMouseMove = (e: MouseEvent) => {
+    if (!isDraggingVertical) return
+    
+    const container = document.querySelector('main')
+    if (!container) return
+    
+    const rect = container.getBoundingClientRect()
+    const newHeight = rect.bottom - e.clientY
+    
+    // Clamp between 200px and 800px
+    const clampedHeight = Math.max(200, Math.min(800, newHeight))
+    setClinicalNotesHeight(clampedHeight)
   }
   
   // Add/remove event listeners
@@ -58,6 +81,17 @@ function MainApp() {
       }
     }
   }, [isDragging])
+  
+  useEffect(() => {
+    if (isDraggingVertical) {
+      window.addEventListener('mousemove', handleVerticalMouseMove as any)
+      window.addEventListener('mouseup', handleMouseUp)
+      return () => {
+        window.removeEventListener('mousemove', handleVerticalMouseMove as any)
+        window.removeEventListener('mouseup', handleMouseUp)
+      }
+    }
+  }, [isDraggingVertical])
 
   return (
     <div className="flex flex-col h-screen bg-background overflow-hidden">
@@ -73,10 +107,24 @@ function MainApp() {
         >
           <LeftPanel activeTab={activeTab} onTabChange={setActiveTab} />
           
+          {/* Vertical Resize Handle - Above Clinical Notes */}
+          <div 
+            className="h-1 bg-border hover:bg-primary hover:h-1.5 cursor-row-resize transition-all relative group z-10"
+            onMouseDown={handleVerticalMouseDown}
+          >
+            <div className="absolute inset-x-0 -top-1 -bottom-1" />
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
+              <div className="bg-primary text-primary-foreground px-2 py-1 rounded text-xs whitespace-nowrap">
+                ⋯ Drag to resize
+              </div>
+            </div>
+          </div>
+          
           {/* Clinical Notes Input - Below left panel */}
           <InputSection 
             isCollapsed={isInputCollapsed} 
-            onToggleCollapse={() => setIsInputCollapsed(!isInputCollapsed)} 
+            onToggleCollapse={() => setIsInputCollapsed(!isInputCollapsed)}
+            height={clinicalNotesHeight}
           />
         </div>
         

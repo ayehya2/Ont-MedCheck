@@ -13,6 +13,7 @@ const hasAIKey = !!import.meta.env.VITE_GEMINI_API_KEY
 interface InputSectionProps {
   isCollapsed: boolean
   onToggleCollapse: () => void
+  height?: number
 }
 
 // Simple pattern-based extraction (fallback when no API key)
@@ -131,7 +132,7 @@ function extractDataFromNotes(notes: string) {
   return extracted
 }
 
-export function InputSection({ isCollapsed, onToggleCollapse }: InputSectionProps) {
+export function InputSection({ isCollapsed, onToggleCollapse, height = 600 }: InputSectionProps) {
   const [notes, setNotes] = useState('')
   const [isProcessing, setIsProcessing] = useState(false)
   const [useAI, setUseAI] = useState(hasAIKey)
@@ -418,7 +419,7 @@ export function InputSection({ isCollapsed, onToggleCollapse }: InputSectionProp
   return (
     <div 
       className="border-t bg-muted/30 overflow-hidden transition-all duration-300 ease-in-out flex flex-col"
-      style={{ height: isCollapsed ? '40px' : '600px' }}
+      style={{ height: isCollapsed ? '40px' : `${height}px` }}
     >
       {/* Header / Title Bar - Always visible */}
       <button
