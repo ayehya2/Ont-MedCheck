@@ -1,8 +1,8 @@
-import { ChevronDown, ChevronUp, Sparkles, Trash2, Loader2, Zap } from 'lucide-react'
+import { ChevronDown, ChevronUp, Sparkles, Trash2, Loader2, Zap, Mic, MicOff } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { OCRUpload } from '@/components/OCRUpload'
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useFormData } from '@/context/FormDataContext'
 import { useToast } from '@/hooks/use-toast'
 import { processWithAI } from '@/services/aiService'
@@ -135,8 +135,91 @@ export function InputSection({ isCollapsed, onToggleCollapse }: InputSectionProp
   const [notes, setNotes] = useState('')
   const [isProcessing, setIsProcessing] = useState(false)
   const [useAI, setUseAI] = useState(hasAIKey)
+  const [isListening, setIsListening] = useState(false)
   const { updateField, data, setFormData } = useFormData()
   const { toast } = useToast()
+  const recognitionRef = useRef<any>(null)
+
+  // Initialize speech recognition
+  useEffect(() => {
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
+      recognitionRef.current = new SpeechRecognition()
+      recognitionRef.current.continuous = true
+      recognitionRef.current.interimResults = true
+      recognitionRef.current.lang = 'en-US'
+
+      recognitionRef.current.onresult = (event: any) => {
+        let interimTranscript = ''
+        let finalTranscript = ''
+
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          const transcript = event.results[i][0].transcript
+          if (event.results[i].isFinal) {
+            finalTranscript += transcript + ' '
+          } else {
+            interimTranscript += transcript
+          }
+        }
+
+        if (finalTranscript) {
+          setNotes(prev => prev ? `${prev} ${finalTranscript}` : finalTranscript)
+        }
+      }
+
+      recognitionRef.current.onerror = (event: any) => {
+        console.error('Speech recognition error:', event.error)
+        setIsListening(false)
+        toast({
+          title: "Speech Recognition Error",
+          description: event.error === 'no-speech' ? 'No speech detected. Please try again.' : `Error: ${event.error}`,
+          variant: "destructive"
+        })
+      }
+
+      recognitionRef.current.onend = () => {
+        setIsListening(false)
+      }
+    }
+
+    return () => {
+      if (recognitionRef.current) {
+        recognitionRef.current.stop()
+      }
+    }
+  }, [toast])
+
+  const toggleSpeechRecognition = () => {
+    if (!recognitionRef.current) {
+      toast({
+        title: "Not Supported",
+        description: "Speech recognition is not supported in your browser. Try Chrome or Edge.",
+        variant: "destructive"
+      })
+      return
+    }
+
+    if (isListening) {
+      recognitionRef.current.stop()
+      setIsListening(false)
+    } else {
+      try {
+        recognitionRef.current.start()
+        setIsListening(true)
+        toast({
+          title: "Listening...",
+          description: "Speak into your microphone. Click again to stop.",
+        })
+      } catch (error) {
+        console.error('Failed to start recognition:', error)
+        toast({
+          title: "Failed to Start",
+          description: "Could not access microphone. Check permissions.",
+          variant: "destructive"
+        })
+      }
+    }
+  }
 
   // AI-powered extraction using Gemini API
   const handleProcessWithAI = async () => {
@@ -390,11 +473,30 @@ City: Toronto
 Postal: M5V 2K1
 Physician: Dr. Jane Doe
 Allergies: Penicillin, Sulfa"
-            className="flex-1 resize-none font-mono text-sm bg-background border-border focus:border-primary transition-colors"
+            className="flex-1 resize-y font-mono text-sm bg-background border-border focus:border-primary transition-colors min-h-[100px]"
           />
         </div>
 
         <div className="flex items-center gap-2 flex-wrap">
+          <Button
+            onClick={toggleSpeechRecognition}
+            variant={isListening ? "destructive" : "outline"}
+            className="gap-2"
+            disabled={isProcessing}
+          >
+            {isListening ? (
+              <>
+                <MicOff className="h-4 w-4 animate-pulse" />
+                Stop Recording
+              </>
+            ) : (
+              <>
+                <Mic className="h-4 w-4" />
+                Voice Input
+              </>
+            )}
+          </Button>
+
           <Button
             onClick={handleProcess}
             disabled={!notes.trim() || isProcessing}
