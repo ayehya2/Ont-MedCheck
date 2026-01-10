@@ -9,7 +9,7 @@ interface Form3PDFProps {
 const styles = StyleSheet.create({
   page: {
     padding: 14,
-    fontSize: 7,
+    fontSize: 8,
     fontFamily: 'Times-Roman',
     lineHeight: 1.2,
     color: '#000000',
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     objectFit: 'contain'
   },
   title: {
-    fontSize: 14,
+    fontSize: 15,
     fontFamily: 'Helvetica-Bold',
     marginBottom: 3
   },
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
   sectionHeader: {
     backgroundColor: '#D0D8E8',
     padding: 3,
-    fontSize: 9,
+    fontSize: 10,
     fontFamily: 'Helvetica-Bold',
     marginTop: 2,
     marginBottom: 1
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     // No right border
   },
   cellLabel: {
-    fontSize: 6,
+    fontSize: 7,
     fontFamily: 'Helvetica-Bold',
     backgroundColor: '#F0F0F0',
     padding: 2,
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#999'
   },
   cellValue: {
-    fontSize: 8,
+    fontSize: 9,
     padding: 2,
     backgroundColor: '#E8EEF7',
     minHeight: 12
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
     marginTop: 2
   },
   allergiesLabel: {
-    fontSize: 6,
+    fontSize: 7,
     fontFamily: 'Helvetica-Bold',
     backgroundColor: '#F0F0F0',
     padding: 2,
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#999'
   },
   allergiesValue: {
-    fontSize: 7,
+    fontSize: 8,
     padding: 2,
     minHeight: 14,
     backgroundColor: '#E8EEF7'
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
   },
   checkmark: {
     color: '#FFF',
-    fontSize: 6
+    fontSize: 7
   },
   // Medication Table
   medicationTable: {
@@ -164,12 +164,12 @@ const styles = StyleSheet.create({
     padding: 2
   },
   medicationHeaderText: {
-    fontSize: 7,
+    fontSize: 8,
     fontFamily: 'Helvetica-Bold',
     textAlign: 'center'
   },
   medicationHeaderSubtext: {
-    fontSize: 5,
+    fontSize: 6,
     textAlign: 'center',
     marginTop: 1
   },
@@ -184,12 +184,12 @@ const styles = StyleSheet.create({
     padding: 2,
     borderRightWidth: 0.5,
     borderRightColor: '#999',
-    fontSize: 7
+    fontSize: 8
   },
   medicationCellLast: {
     flex: 1,
     padding: 2,
-    fontSize: 7
+    fontSize: 8
   },
   // Bottom section
   attentionBox: {
@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
     borderColor: '#999'
   },
   attentionText: {
-    fontSize: 6,
+    fontSize: 7,
     lineHeight: 1.3
   },
   pharmacySection: {
@@ -230,7 +230,7 @@ const styles = StyleSheet.create({
     right: 18,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    fontSize: 6,
+    fontSize: 7,
     borderTopWidth: 0.5,
     borderTopColor: '#999',
     paddingTop: 4
@@ -404,7 +404,7 @@ export function Form3PDF({ data }: Form3PDFProps) {
           <View style={form3.noNonPrescriptionProducts ? styles.checkboxChecked : styles.checkbox}>
             {form3.noNonPrescriptionProducts && <Text style={styles.checkmark}>✓</Text>}
           </View>
-          <Text style={{ fontSize: 6 }}>
+          <Text style={{ fontSize: 7 }}>
             Select <Text style={{ fontFamily: 'Helvetica-Bold' }}>only</Text> if patient is <Text style={{ fontFamily: 'Helvetica-Bold' }}>not</Text> taking any non-prescription products (ie/ vitamins, natural health products, over-the-counter)
           </Text>
         </View>

@@ -10,7 +10,7 @@ interface Form1PDFProps {
 const styles = StyleSheet.create({
   page: {
     padding: 18,
-    fontSize: 9,
+    fontSize: 11,
     fontFamily: 'Times-Roman',
     lineHeight: 1.3,
     color: '#000000',
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     objectFit: 'contain'
   },
   title: {
-    fontSize: 14,
+    fontSize: 16,
     fontFamily: 'Helvetica-Bold',
     textAlign: 'left',
     marginBottom: 16
@@ -51,32 +51,34 @@ const styles = StyleSheet.create({
     marginBottom: 6
   },
   label: {
-    fontSize: 9,
+    fontSize: 11,
     fontFamily: 'Helvetica-Bold',
     width: 100
   },
   labelSmall: {
-    fontSize: 9,
+    fontSize: 10.5,
     fontFamily: 'Helvetica-Bold',
-    width: 80
+    width: 85
   },
   value: {
     flex: 1,
-    fontSize: 9,
+    fontSize: 11,
     backgroundColor: '#E8EEF7',
     padding: 4,
-    minHeight: 16
+    height: 20,
+    minHeight: 20
   },
   valueHalf: {
-    width: '45%',
-    fontSize: 9,
+    flex: 1,
+    fontSize: 11,
     backgroundColor: '#E8EEF7',
     padding: 4,
-    minHeight: 16,
-    marginRight: 8
+    height: 20,
+    minHeight: 20,
+    marginRight: 10
   },
   paragraph: {
-    fontSize: 9,
+    fontSize: 11,
     marginBottom: 8,
     lineHeight: 1.4
   },
@@ -84,7 +86,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Helvetica-Bold'
   },
   sectionTitle: {
-    fontSize: 9,
+    fontSize: 11,
     fontFamily: 'Helvetica-Bold',
     marginTop: 12,
     marginBottom: 4
@@ -119,11 +121,11 @@ const styles = StyleSheet.create({
   },
   checkmark: {
     color: '#FFFFFF',
-    fontSize: 7
+    fontSize: 9
   },
   checkboxText: {
     flex: 1,
-    fontSize: 9,
+    fontSize: 11,
     lineHeight: 1.4
   },
   issuesBox: {
@@ -142,7 +144,7 @@ const styles = StyleSheet.create({
     width: '50%'
   },
   signatureLabel: {
-    fontSize: 9,
+    fontSize: 11,
     fontFamily: 'Helvetica-Bold',
     marginBottom: 4
   },
@@ -211,7 +213,7 @@ export function Form1Page({ data }: Form1PDFProps) {
         {/* Row 2: Telephone and Pages */}
         <View style={styles.row}>
           <View style={{ flexDirection: 'row', flex: 1 }}>
-            <Text style={styles.labelSmall}>Telephone Number</Text>
+            <Text style={{ ...styles.labelSmall, width: 125 }}>Telephone Number</Text>
             <View style={styles.valueHalf}>
               <Text>{form1.telephoneNumber || ''}</Text>
             </View>
@@ -233,7 +235,7 @@ export function Form1Page({ data }: Form1PDFProps) {
             </View>
           </View>
           <View style={{ flexDirection: 'row', flex: 1 }}>
-            <Text style={styles.labelSmall}>Date (yyyy/mm/dd)</Text>
+            <Text style={{ ...styles.labelSmall, width: 125 }}>Date (yyyy/mm/dd)</Text>
             <View style={styles.value}>
               <Text>{formatDate(form1.date) || ''}</Text>
             </View>
@@ -242,21 +244,21 @@ export function Form1Page({ data }: Form1PDFProps) {
 
         {/* Patient Information */}
         <View style={styles.fieldGroup}>
-          <Text style={styles.label}>Re: Patient's Name</Text>
+          <Text style={styles.label}>Patient's Name</Text>
           <View style={styles.value}>
             <Text>{form1.patientName || ''}</Text>
           </View>
         </View>
 
         <View style={styles.fieldGroup}>
-          <Text style={{ ...styles.labelSmall, width: 100 }}>Patient's Address</Text>
+          <Text style={{ ...styles.labelSmall, width: 115 }}>Patient's Address</Text>
           <View style={styles.value}>
             <Text>{form1.patientAddress || ''}</Text>
           </View>
         </View>
 
         <View style={styles.fieldGroup}>
-          <Text style={{ ...styles.labelSmall, width: 100 }}>Telephone Number</Text>
+          <Text style={{ ...styles.labelSmall, width: 125 }}>Telephone Number</Text>
           <View style={styles.value}>
             <Text>{form1.patientPhone || ''}</Text>
           </View>
@@ -265,12 +267,12 @@ export function Form1Page({ data }: Form1PDFProps) {
         {/* MedsCheck paragraph */}
         <View style={{ marginTop: 12 }}>
           <View style={styles.inlineText}>
-            <Text style={{ fontSize: 9 }}>Our mutual patient noted above has had a MedsCheck completed by our pharmacist on </Text>
+            <Text style={{ fontSize: 11 }}>Our mutual patient noted above has had a MedsCheck completed by our pharmacist on </Text>
             <View style={styles.inlineValue}>
-              <Text style={{ fontSize: 9 }}>{formatDate(form1.medsCheckDate) || '                    '}</Text>
+              <Text style={{ fontSize: 11 }}>{formatDate(form1.medsCheckDate) || '                    '}</Text>
             </View>
           </View>
-          <Text style={{ fontSize: 9, marginTop: 2 }}>Date (yyyy/mm/dd)</Text>
+          <Text style={{ fontSize: 11, marginTop: 2 }}>Date (yyyy/mm/dd)</Text>
         </View>
 
         {/* Description paragraphs */}
@@ -310,9 +312,9 @@ export function Form1Page({ data }: Form1PDFProps) {
         </View>
 
         {/* Issues box */}
-        <Text style={{ fontSize: 9, marginTop: 8 }}>Issues</Text>
+        <Text style={{ fontSize: 11, marginTop: 8 }}>Issues</Text>
         <View style={styles.issuesBox}>
-          <Text style={{ fontSize: 9 }}>{form1.issues || ''}</Text>
+          <Text style={{ fontSize: 11 }}>{form1.issues || ''}</Text>
         </View>
 
         {/* Signature section */}
@@ -320,7 +322,7 @@ export function Form1Page({ data }: Form1PDFProps) {
           <View style={styles.signatureGroup}>
             <Text style={styles.signatureLabel}>Pharmacist Name</Text>
             <View style={styles.signatureLine}>
-              <Text style={{ fontSize: 9 }}>{form1.pharmacistName || ''}</Text>
+              <Text style={{ fontSize: 11 }}>{form1.pharmacistName || ''}</Text>
             </View>
           </View>
           <View style={styles.signatureGroup}>
@@ -332,7 +334,7 @@ export function Form1Page({ data }: Form1PDFProps) {
                   style={{ height: 25, objectFit: 'contain' }}
                 />
               ) : (
-                <Text style={{ fontSize: 9, fontStyle: 'italic' }}>{form1.pharmacistSignature || ''}</Text>
+                <Text style={{ fontSize: 11, fontStyle: 'italic' }}>{form1.pharmacistSignature || ''}</Text>
               )}
             </View>
           </View>

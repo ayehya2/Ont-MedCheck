@@ -8,10 +8,10 @@ interface Form2PDFProps {
 // Styles specific to Form 2 - matching government form layout (PORTRAIT)
 const styles = StyleSheet.create({
   page: {
-    padding: 16,
-    fontSize: 7,
+    padding: 12,
+    fontSize: 9,
     fontFamily: 'Times-Roman',
-    lineHeight: 1.2,
+    lineHeight: 1.1,
     color: '#000000',
     backgroundColor: '#FFFFFF'
   },
@@ -19,10 +19,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 4,
+    marginBottom: 2,
     borderBottomWidth: 1,
     borderBottomColor: '#000',
-    paddingBottom: 3
+    paddingBottom: 2
   },
   logo: {
     height: 25,
@@ -35,29 +35,29 @@ const styles = StyleSheet.create({
     objectFit: 'contain'
   },
   title: {
-    fontSize: 12,
+    fontSize: 14,
     fontFamily: 'Helvetica-Bold',
     textAlign: 'left',
-    marginBottom: 3,
+    marginBottom: 2,
     color: '#000000'
   },
   subtitle: {
-    fontSize: 7,
+    fontSize: 9,
     textAlign: 'left',
-    marginBottom: 4,
-    lineHeight: 1.2
+    marginBottom: 2,
+    lineHeight: 1.1
   },
   sectionHeader: {
     backgroundColor: '#D0D8E8',
-    padding: 3,
-    fontSize: 9,
+    padding: 2,
+    fontSize: 11,
     fontFamily: 'Helvetica-Bold',
-    marginTop: 2,
-    marginBottom: 2
+    marginTop: 0,
+    marginBottom: 0
   },
   row: {
     flexDirection: 'row',
-    marginBottom: 1
+    marginBottom: 0
   },
   fieldGroup: {
     flexDirection: 'row',
@@ -65,24 +65,24 @@ const styles = StyleSheet.create({
     borderColor: '#999'
   },
   fieldLabel: {
-    fontSize: 7,
+    fontSize: 9,
     fontFamily: 'Helvetica-Bold',
     backgroundColor: '#F0F0F0',
-    padding: 3,
+    padding: 2,
     width: 80,
     borderRightWidth: 0.5,
     borderRightColor: '#999'
   },
   fieldValue: {
-    fontSize: 8,
-    padding: 3,
+    fontSize: 10,
+    padding: 2,
     flex: 1,
     backgroundColor: '#E8EEF7',
     minHeight: 14
   },
   fieldValueSmall: {
-    fontSize: 8,
-    padding: 3,
+    fontSize: 10,
+    padding: 2,
     backgroundColor: '#E8EEF7',
     minHeight: 14
   },
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     borderWidth: 1,
     borderColor: '#000000',
-    marginBottom: 1
+    marginBottom: 0
   },
   multiFieldCell: {
     flex: 1,
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     flex: 1
   },
   cellLabel: {
-    fontSize: 6,
+    fontSize: 8,
     fontFamily: 'Helvetica-Bold',
     backgroundColor: '#F0F0F0',
     padding: 2,
@@ -109,34 +109,34 @@ const styles = StyleSheet.create({
     borderBottomColor: '#999'
   },
   cellValue: {
-    fontSize: 8,
+    fontSize: 10,
     padding: 2,
     backgroundColor: '#E8EEF7',
     minHeight: 12
   },
   paragraph: {
-    fontSize: 8,
-    marginBottom: 2,
-    lineHeight: 1.2,
+    fontSize: 10,
+    marginBottom: 0,
+    lineHeight: 1.1,
     textAlign: 'justify'
   },
   serviceCheckboxContainer: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginBottom: 2,
-    marginTop: 1
+    flexWrap: 'nowrap',
+    marginBottom: 0,
+    marginTop: 0
   },
   serviceCheckboxItem: {
     flexDirection: 'row',
     alignItems: 'center',
     width: '25%',
-    marginBottom: 4,
-    paddingRight: 8
+    marginBottom: 0,
+    paddingRight: 4
   },
   checkboxRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 2,
+    marginBottom: 0,
     marginLeft: 4
   },
   checkbox: {
@@ -160,20 +160,20 @@ const styles = StyleSheet.create({
   },
   checkmark: {
     color: '#FFF',
-    fontSize: 6
+    fontSize: 8
   },
   checkboxLabel: {
-    fontSize: 8,
+    fontSize: 10,
     flex: 1
   },
   bulletPoint: {
-    fontSize: 8,
-    marginBottom: 2,
+    fontSize: 10,
+    marginBottom: 0,
     marginLeft: 8,
-    lineHeight: 1.2
+    lineHeight: 1.1
   },
   signatureSection: {
-    marginTop: 3,
+    marginTop: 0,
     flexDirection: 'row',
     borderWidth: 0.5,
     borderColor: '#999'
@@ -192,15 +192,15 @@ const styles = StyleSheet.create({
     borderColor: '#999'
   },
   commentsLabel: {
-    fontSize: 7,
+    fontSize: 9,
     backgroundColor: '#F0F0F0',
-    padding: 3,
+    padding: 2,
     borderBottomWidth: 0.5,
     borderBottomColor: '#999'
   },
   commentsValue: {
-    fontSize: 8,
-    padding: 3,
+    fontSize: 10,
+    padding: 2,
     minHeight: 25,
     backgroundColor: '#FFF'
   },
@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
     right: 30,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    fontSize: 6,
+    fontSize: 8,
     borderTopWidth: 0.5,
     borderTopColor: '#999',
     paddingTop: 4

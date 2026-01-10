@@ -12,7 +12,7 @@ interface Form4PDFProps {
 const styles = StyleSheet.create({
   page: {
     padding: 18,
-    fontSize: 8,
+    fontSize: 9,
     fontFamily: 'Times-Roman',
     lineHeight: 1.2,
     color: '#000000',
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     objectFit: 'contain'
   },
   title: {
-    fontSize: 14,
+    fontSize: 15,
     fontFamily: 'Times-Bold',
     marginBottom: 4
   },
@@ -50,12 +50,12 @@ const styles = StyleSheet.create({
     marginBottom: 8
   },
   serviceLabel: {
-    fontSize: 8,
+    fontSize: 9,
     padding: 3,
     width: 140
   },
   serviceValue: {
-    fontSize: 8,
+    fontSize: 9,
     padding: 3,
     flex: 1,
     backgroundColor: '#E8EEF7',
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
   sectionHeader: {
     backgroundColor: '#D0D8E8',
     padding: 4,
-    fontSize: 9,
+    fontSize: 10,
     fontFamily: 'Times-Bold',
     marginTop: 6,
     marginBottom: 0,
@@ -94,12 +94,12 @@ const styles = StyleSheet.create({
     // No right border
   },
   cellLabel: {
-    fontSize: 7,
+    fontSize: 8,
     padding: 2,
     backgroundColor: '#FFFFFF'
   },
   cellValue: {
-    fontSize: 8,
+    fontSize: 9,
     padding: 3,
     backgroundColor: '#E8EEF7',
     minHeight: 14
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
     marginRight: 4
   },
   checkboxLabel: {
-    fontSize: 7,
+    fontSize: 8,
     flex: 1
   },
   // Subsection for interview location
@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 0
   },
   subSectionHeader: {
-    fontSize: 8,
+    fontSize: 9,
     padding: 3,
     backgroundColor: '#FFFFFF',
     borderBottomWidth: 0.5,
@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-end',
-    fontSize: 6,
+    fontSize: 7,
     borderTopWidth: 0.5,
     borderTopColor: '#999',
     paddingTop: 4
@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
     textAlign: 'right'
   },
   opaLogo: {
-    fontSize: 7,
+    fontSize: 8,
     color: '#0066CC'
   }
 })
@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
 function Checkbox({ checked }: { checked: boolean }) {
   return (
     <View style={checked ? styles.checkboxChecked : styles.checkbox}>
-      {checked && <Text style={{ color: '#FFF', fontSize: 6, textAlign: 'center' }}>✓</Text>}
+      {checked && <Text style={{ color: '#FFF', fontSize: 7, textAlign: 'center' }}>✓</Text>}
     </View>
   )
 }
@@ -505,11 +505,11 @@ export function Form4PDF({ data }: Form4PDFProps) {
             <>
               <View style={{ marginLeft: 10, flexDirection: 'row', alignItems: 'center' }}>
                 <Checkbox checked={form4.tobaccoYesNo === 'yes'} />
-                <Text style={{ fontSize: 7, marginRight: 8 }}>Yes</Text>
+                <Text style={{ fontSize: 8, marginRight: 8 }}>Yes</Text>
                 <Checkbox checked={form4.tobaccoYesNo === 'no'} />
-                <Text style={{ fontSize: 7, marginRight: 8 }}>No</Text>
+                <Text style={{ fontSize: 8, marginRight: 8 }}>No</Text>
               </View>
-              <Text style={{ fontSize: 7 }}>{form4.tobaccoCigPerDay} cig/day</Text>
+              <Text style={{ fontSize: 8 }}>{form4.tobaccoCigPerDay} cig/day</Text>
             </>
           )}
         </View>
@@ -519,7 +519,7 @@ export function Form4PDF({ data }: Form4PDFProps) {
           <Checkbox checked={form4.smokingCessation} />
           <Text style={styles.checkboxLabel}>Smoking Cessation status</Text>
           {form4.smokingCessation && form4.smokingCessationStatus && (
-            <Text style={{ fontSize: 7, marginLeft: 8, flex: 1, backgroundColor: '#E8EEF7', padding: 2 }}>{form4.smokingCessationStatus}</Text>
+            <Text style={{ fontSize: 8, marginLeft: 8, flex: 1, backgroundColor: '#E8EEF7', padding: 2 }}>{form4.smokingCessationStatus}</Text>
           )}
         </View>
 
@@ -531,11 +531,11 @@ export function Form4PDF({ data }: Form4PDFProps) {
             <>
               <View style={{ marginLeft: 10, flexDirection: 'row', alignItems: 'center' }}>
                 <Checkbox checked={form4.recreationalDrugYesNo === 'yes'} />
-                <Text style={{ fontSize: 7, marginRight: 8 }}>Yes</Text>
+                <Text style={{ fontSize: 8, marginRight: 8 }}>Yes</Text>
                 <Checkbox checked={form4.recreationalDrugYesNo === 'no'} />
-                <Text style={{ fontSize: 7, marginRight: 8 }}>No</Text>
+                <Text style={{ fontSize: 8, marginRight: 8 }}>No</Text>
               </View>
-              <Text style={{ fontSize: 7 }}>Frequency: {form4.recreationalDrugFrequency}</Text>
+              <Text style={{ fontSize: 8 }}>Frequency: {form4.recreationalDrugFrequency}</Text>
             </>
           )}
         </View>
@@ -548,11 +548,11 @@ export function Form4PDF({ data }: Form4PDFProps) {
             <>
               <View style={{ marginLeft: 10, flexDirection: 'row', alignItems: 'center' }}>
                 <Checkbox checked={form4.alcoholYesNo === 'yes'} />
-                <Text style={{ fontSize: 7, marginRight: 8 }}>Yes</Text>
+                <Text style={{ fontSize: 8, marginRight: 8 }}>Yes</Text>
                 <Checkbox checked={form4.alcoholYesNo === 'no'} />
-                <Text style={{ fontSize: 7, marginRight: 8 }}>No</Text>
+                <Text style={{ fontSize: 8, marginRight: 8 }}>No</Text>
               </View>
-              <Text style={{ fontSize: 7 }}>Frequency: {form4.alcoholFrequency}</Text>
+              <Text style={{ fontSize: 8 }}>Frequency: {form4.alcoholFrequency}</Text>
             </>
           )}
         </View>
@@ -562,7 +562,7 @@ export function Form4PDF({ data }: Form4PDFProps) {
           <Checkbox checked={form4.exerciseRegimen} />
           <Text style={styles.checkboxLabel}>Exercise Regimen</Text>
           {form4.exerciseRegimen && form4.exerciseRegimenDetails && (
-            <Text style={{ fontSize: 7, marginLeft: 8, flex: 1, backgroundColor: '#E8EEF7', padding: 2 }}>{form4.exerciseRegimenDetails}</Text>
+            <Text style={{ fontSize: 8, marginLeft: 8, flex: 1, backgroundColor: '#E8EEF7', padding: 2 }}>{form4.exerciseRegimenDetails}</Text>
           )}
         </View>
 
@@ -571,7 +571,7 @@ export function Form4PDF({ data }: Form4PDFProps) {
           <Checkbox checked={form4.lifestyleOther} />
           <Text style={styles.checkboxLabel}>Other (Specify)</Text>
           {form4.lifestyleOther && form4.lifestyleOtherDetails && (
-            <Text style={{ fontSize: 7, marginLeft: 8, flex: 1, backgroundColor: '#E8EEF7', padding: 2 }}>{form4.lifestyleOtherDetails}</Text>
+            <Text style={{ fontSize: 8, marginLeft: 8, flex: 1, backgroundColor: '#E8EEF7', padding: 2 }}>{form4.lifestyleOtherDetails}</Text>
           )}
         </View>
 
@@ -595,7 +595,7 @@ export function Form4PDF({ data }: Form4PDFProps) {
         {/* Patient Characteristics */}
         <Text style={[styles.sectionHeader, { marginTop: 8 }]}>Patient Characteristics Contributing to the Need for the MedsCheck Service</Text>
         <View style={{ padding: 2, borderWidth: 0.5, borderColor: '#000', borderTopWidth: 0 }}>
-          <Text style={{ fontSize: 7, marginBottom: 4 }}>(Select all that apply)</Text>
+          <Text style={{ fontSize: 8, marginBottom: 4 }}>(Select all that apply)</Text>
         </View>
 
         {/* Characteristic checkboxes - First group */}
