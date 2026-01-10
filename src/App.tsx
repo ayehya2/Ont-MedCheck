@@ -23,7 +23,7 @@ function MainApp() {
   const [leftPanelWidth, setLeftPanelWidth] = useState(50)
   
   // State for clinical notes height (pixels, min 200px max 800px)
-  const [clinicalNotesHeight, setClinicalNotesHeight] = useState(600)
+  const [clinicalNotesHeight, setClinicalNotesHeight] = useState(400)
   
   // State for dragging
   const [isDragging, setIsDragging] = useState(false)
@@ -69,14 +69,10 @@ function MainApp() {
     if (!isDraggingVertical) return
     e.preventDefault()
 
-    // Get the InputSection container directly
-    const inputSection = document.querySelector('[class*="border-t bg-muted"]') as HTMLElement
-    if (!inputSection) return
-
-    // Calculate new height based on mouse Y position
+    // Calculate new height based on mouse Y position from bottom of viewport
     // The handle is at the TOP of the input section, so:
-    // - Moving mouse DOWN should INCREASE height (make section taller)
-    // - Moving mouse UP should DECREASE height (make section shorter)
+    // - Moving mouse DOWN (higher clientY) should DECREASE height (make section shorter)
+    // - Moving mouse UP (lower clientY) should INCREASE height (make section taller)
     const newHeight = window.innerHeight - e.clientY
 
     // Clamp between 200px and 800px

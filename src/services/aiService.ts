@@ -3,7 +3,10 @@ import { MedsCheckFormData, generateId } from '@/types/forms'
 // AI Service for processing clinical notes
 // Supports Google Gemini API (works directly in browser!)
 
-const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY || ''
+// Get API key from localStorage (set by user in Settings dialog)
+function getApiKey(): string {
+  return localStorage.getItem('medscheck_gemini_api_key') || ''
+}
 
 interface AIExtractionResult {
   form1?: Partial<MedsCheckFormData['form1']>
@@ -368,8 +371,10 @@ export async function processWithAI(
   clinicalNotes: string,
   existingData: MedsCheckFormData
 ): Promise<MedsCheckFormData> {
+  const apiKey = getApiKey()
+  
   // If no API key, use mock extraction
-  if (!GEMINI_API_KEY) {
+  if (!apiKey) {
     console.warn('No Gemini API key found. Using mock extraction.')
     return mockExtraction(clinicalNotes, existingData)
   }
@@ -381,7 +386,7 @@ export async function processWithAI(
     const model = 'gemini-2.0-flash'
     
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${GEMINI_API_KEY}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
       {
         method: 'POST',
         headers: {

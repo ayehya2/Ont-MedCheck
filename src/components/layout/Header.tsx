@@ -1,6 +1,7 @@
 import { HelpCircle, FileText, Save, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ThemeToggle } from '@/components/ThemeToggle'
+import { SettingsDialog } from '@/components/SettingsDialog'
 import { useFormData } from '@/context/FormDataContext'
 import { useToast } from '@/hooks/use-toast'
 
@@ -75,6 +76,7 @@ export function Header() {
         </Button>
         <div className="w-px h-5 bg-border" />
         <ThemeToggle />
+        <SettingsDialog />
         <Button
           variant="ghost"
           size="sm"

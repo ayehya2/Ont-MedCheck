@@ -7,8 +7,10 @@ import { useFormData } from '@/context/FormDataContext'
 import { useToast } from '@/hooks/use-toast'
 import { processWithAI } from '@/services/aiService'
 
-// Check if Gemini API key is configured
-const hasAIKey = !!import.meta.env.VITE_GEMINI_API_KEY
+// Check if Gemini API key is configured in localStorage
+function hasAIKey(): boolean {
+  return !!localStorage.getItem('medscheck_gemini_api_key')
+}
 
 interface InputSectionProps {
   isCollapsed: boolean
@@ -135,11 +137,24 @@ function extractDataFromNotes(notes: string) {
 export function InputSection({ isCollapsed, onToggleCollapse, height = 600 }: InputSectionProps) {
   const [notes, setNotes] = useState('')
   const [isProcessing, setIsProcessing] = useState(false)
-  const [useAI, setUseAI] = useState(hasAIKey)
+  const [apiKeyAvailable, setApiKeyAvailable] = useState(hasAIKey())
+  const [useAI, setUseAI] = useState(hasAIKey())
   const [isListening, setIsListening] = useState(false)
   const { updateField, data, setFormData } = useFormData()
   const { toast } = useToast()
   const recognitionRef = useRef<any>(null)
+
+  // Listen for API key changes
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const hasKey = hasAIKey()
+      setApiKeyAvailable(hasKey)
+      setUseAI(hasKey)
+    }
+    
+    window.addEventListener('storage', handleStorageChange)
+    return () => window.removeEventListener('storage', handleStorageChange)
+  }, [])
 
   // Initialize speech recognition
   useEffect(() => {
@@ -381,7 +396,7 @@ export function InputSection({ isCollapsed, onToggleCollapse, height = 600 }: In
   }
 
   const handleProcess = async () => {
-    if (useAI && hasAIKey) {
+    if (useAI && apiKeyAvailable) {
       await handleProcessWithAI()
     } else {
       await handleProcessBasic()
@@ -400,7 +415,7 @@ export function InputSection({ isCollapsed, onToggleCollapse, height = 600 }: In
     
     // Process the extracted text
     setTimeout(async () => {
-      if (useAI && hasAIKey) {
+      if (useAI && apiKeyAvailable) {
         await handleProcessWithAI()
       } else {
         await handleProcessBasic()
@@ -418,8 +433,11 @@ export function InputSection({ isCollapsed, onToggleCollapse, height = 600 }: In
 
   return (
     <div 
-      className="border-t bg-muted/30 overflow-hidden transition-all duration-300 ease-in-out flex flex-col"
-      style={{ height: isCollapsed ? '40px' : `${height}px` }}
+      className="border-t bg-muted/30 overflow-hidden flex flex-col"
+      style={{ 
+        height: isCollapsed ? '40px' : `${height}px`,
+        transition: isCollapsed ? 'height 0.3s ease-in-out' : 'none'
+      }}
     >
       {/* Header / Title Bar - Always visible */}
       <button
@@ -443,16 +461,16 @@ export function InputSection({ isCollapsed, onToggleCollapse, height = 600 }: In
       </button>
 
       {/* Expandable Content */}
-      <div className="px-4 pb-4 pt-3 flex-1 flex flex-col overflow-hidden">
+      <div className="px-4 pb-4 pt-3 flex-1 flex flex-col overflow-auto min-h-0">
         {/* OCR Upload Section */}
-        <div className="mb-3">
+        <div className="mb-3 flex-shrink-0">
           <OCRUpload 
             onTextExtracted={handleOCRTextExtracted}
             onError={handleOCRError}
           />
         </div>
 
-        <div className="relative mb-3">
+        <div className="relative mb-3 flex-shrink-0">
           <div className="absolute inset-0 flex items-center">
             <div className="w-full border-t border-border"></div>
           </div>
@@ -474,11 +492,11 @@ City: Toronto
 Postal: M5V 2K1
 Physician: Dr. Jane Doe
 Allergies: Penicillin, Sulfa"
-            className="flex-1 resize-y font-mono text-sm bg-background border-border focus:border-primary transition-colors min-h-[100px]"
+            className="flex-1 resize-none font-mono text-sm bg-background border-border focus:border-primary transition-colors min-h-[80px] h-full"
           />
         </div>
 
-        <div className="flex items-center gap-2 flex-wrap">
+        <div className="flex items-center gap-2 flex-wrap flex-shrink-0">
           <Button
             onClick={toggleSpeechRecognition}
             variant={isListening ? "destructive" : "outline"}
@@ -502,26 +520,26 @@ Allergies: Penicillin, Sulfa"
             onClick={handleProcess}
             disabled={!notes.trim() || isProcessing}
             className="gap-2 shadow-sm"
-            variant={useAI && hasAIKey ? "default" : "secondary"}
+            variant={useAI && apiKeyAvailable ? "default" : "secondary"}
           >
             {isProcessing ? (
               <>
                 <Loader2 className="h-4 w-4 animate-spin" />
-                {useAI && hasAIKey ? "AI Processing..." : "Extracting..."}
+                {useAI && apiKeyAvailable ? "AI Processing..." : "Extracting..."}
               </>
             ) : (
               <>
-                {useAI && hasAIKey ? (
+                {useAI && apiKeyAvailable ? (
                   <Zap className="h-4 w-4" />
                 ) : (
                   <Sparkles className="h-4 w-4" />
                 )}
-                {useAI && hasAIKey ? "Extract with AI" : "Extract (Basic)"}
+                {useAI && apiKeyAvailable ? "Extract with AI" : "Extract (Basic)"}
               </>
             )}
           </Button>
 
-          {hasAIKey && (
+          {apiKeyAvailable && (
             <Button
               variant={useAI ? "default" : "outline"}
               size="sm"
@@ -543,7 +561,7 @@ Allergies: Penicillin, Sulfa"
           </Button>
           
           <span className="text-xs text-muted-foreground ml-auto flex items-center gap-1">
-            {hasAIKey 
+            {apiKeyAvailable 
               ? (useAI ? (
                   <>
                     <span className="inline-block w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
@@ -555,7 +573,7 @@ Allergies: Penicillin, Sulfa"
                     Pattern matching
                   </>
                 ))
-              : "Add VITE_GEMINI_API_KEY to .env for AI"
+              : "Add API key in Settings for AI"
             }
           </span>
         </div>

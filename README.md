@@ -77,23 +77,21 @@ MedsCheck Forms streamlines the documentation process for Ontario's MedsCheck pr
    npm install
    ```
 
-3. **Set up environment variables**
-   
-   Create a `.env` file in the root directory:
-   ```env
-   VITE_GEMINI_API_KEY=your_gemini_api_key_here
-   ```
-   
-   Get your free API key at: https://makersuite.google.com/app/apikey
-
-4. **Start the development server**
+3. **Start the development server**
    ```bash
    npm run dev
    ```
 
-5. **Open in browser**
+4. **Open in browser**
    
    Navigate to `http://localhost:5173`
+
+5. **Configure AI Features (Optional)**
+   
+   Click the Settings (⚙️) icon in the header to add your Google Gemini API key:
+   - Get your free API key at: https://ai.google.dev/gemini-api/docs/api-key
+   - Your API key is stored locally in your browser
+   - AI features work without an API key using basic pattern matching
 
 ## 📦 Tech Stack
 
