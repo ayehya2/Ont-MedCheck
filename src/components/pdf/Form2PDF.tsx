@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 7,
-    textAlign: 'center',
+    textAlign: 'left',
     marginBottom: 10,
     lineHeight: 1.3
   },
@@ -433,15 +433,15 @@ export function Form2PDF({ data }: Form2PDFProps) {
             {form2.patientSignature && form2.patientSignature.startsWith('data:image') ? (
               <Image 
                 src={form2.patientSignature} 
-                style={{ height: 30, objectFit: 'contain', marginTop: 2 }}
+                style={{ height: 25, width: '100%', objectFit: 'contain', padding: 2 }}
               />
             ) : (
-              <Text style={{ ...styles.cellValue, fontStyle: 'italic', minHeight: 20 }}>{form2.patientSignature}</Text>
+              <Text style={{ ...styles.cellValue, fontStyle: 'italic', minHeight: 25 }}>{form2.patientSignature}</Text>
             )}
           </View>
           <View style={styles.signatureFieldLast}>
             <Text style={styles.cellLabel}>Date (yyyy/mm/dd)</Text>
-            <Text style={{ ...styles.cellValue, minHeight: 20 }}>{formatDate(form2.signatureDate)}</Text>
+            <Text style={{ ...styles.cellValue, minHeight: 25 }}>{formatDate(form2.signatureDate)}</Text>
           </View>
         </View>
 
