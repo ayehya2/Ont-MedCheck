@@ -2,6 +2,7 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { PhoneInput } from '@/components/ui/phone-input'
+import { SignaturePad } from '@/components/ui/signature-pad'
 import { useFormData } from '@/context/FormDataContext'
 
 interface FormFieldProps {
@@ -12,10 +13,10 @@ interface FormFieldProps {
 
 function FormField({ label, required, children }: FormFieldProps) {
   return (
-    <div className="space-y-1.5">
-      <Label className="text-sm font-medium">
+    <div className="space-y-2">
+      <Label className="text-sm font-semibold">
         {label}
-        {required && <span className="text-destructive ml-1">*</span>}
+        {required && <span className="text-destructive ml-1 font-bold">*</span>}
       </Label>
       {children}
     </div>
@@ -29,8 +30,8 @@ interface FormSectionProps {
 
 function FormSection({ title, children }: FormSectionProps) {
   return (
-    <div className="space-y-4">
-      <h3 className="text-sm font-semibold text-primary border-b border-border pb-2">
+    <div className="border-2 border-border rounded-lg p-5 space-y-4 bg-card/30">
+      <h3 className="text-base font-bold text-primary pb-2 border-b-2 border-border">
         {title}
       </h3>
       <div className="space-y-4">
@@ -46,20 +47,20 @@ export function Form2Fields() {
 
   // Helper to get validation class for required fields
   const getValidationClass = (value: string, required: boolean) => {
-    if (required && !value.trim()) {
+    if (required && (!value || !value.trim())) {
       return 'border-destructive focus-visible:ring-destructive'
     }
     return ''
   }
 
   return (
-    <div className="p-4 space-y-4 custom-scrollbar">
+    <div className="p-6 space-y-6 custom-scrollbar">
       {/* Form Title */}
-      <div className="bg-primary/10 rounded-lg p-3">
-        <h2 className="text-base font-bold text-primary">
+      <div className="border-2 border-primary rounded-lg p-4 bg-primary/5">
+        <h2 className="text-lg font-bold text-primary">
           Form 2: MedsCheck Patient Acknowledgement of Professional Pharmacy Service
         </h2>
-        <p className="text-xs text-muted-foreground mt-0.5">
+        <p className="text-sm text-muted-foreground mt-1">
           To be completed annually for MedsCheck Professional Pharmacy Services. Please provide a copy to the patient and/or patient's agent.
         </p>
       </div>
@@ -333,15 +334,13 @@ export function Form2Fields() {
           By signing this form, you are acknowledging participation in an in-person MedsCheck medication review with a pharmacist associated with the pharmacy noted above. It may be necessary for the pharmacist to discuss and share your health information with other health care professionals (e.g., physicians, nurses, etc.) in accordance with generally accepted medication therapy management principles.
         </p>
 
-        <div className="grid grid-cols-2 gap-3">
-          <FormField label="Patient/Agent Signature" required>
-            <Input
-              value={form2.patientSignature}
-              onChange={(e) => updateField('form2.patientSignature', e.target.value)}
-              placeholder="Type name as signature"
-              className={getValidationClass(form2.patientSignature, true)}
-            />
-          </FormField>
+        <div className="space-y-4">
+          <SignaturePad
+            value={form2.patientSignature}
+            onChange={(signature) => updateField('form2.patientSignature', signature)}
+            label="Patient/Agent Signature"
+            required
+          />
           <FormField label="Date (yyyy/mm/dd)" required>
             <Input
               type="date"

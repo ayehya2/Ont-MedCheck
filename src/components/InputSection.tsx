@@ -1,6 +1,7 @@
 import { ChevronDown, ChevronUp, Sparkles, Trash2, Loader2, Zap } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
+import { OCRUpload } from '@/components/OCRUpload'
 import { useState } from 'react'
 import { useFormData } from '@/context/FormDataContext'
 import { useToast } from '@/hooks/use-toast'
@@ -291,6 +292,10 @@ export function InputSection({ isCollapsed, onToggleCollapse }: InputSectionProp
     }
   }
 
+  const handleClear = () => {
+    setNotes('')
+  }
+
   const handleProcess = async () => {
     if (useAI && hasAIKey) {
       await handleProcessWithAI()
@@ -299,14 +304,38 @@ export function InputSection({ isCollapsed, onToggleCollapse }: InputSectionProp
     }
   }
 
-  const handleClear = () => {
-    setNotes('')
+  const handleOCRTextExtracted = async (text: string) => {
+    // Add extracted text to notes
+    setNotes(prev => prev ? `${prev}\n\n--- OCR Extracted ---\n${text}` : text)
+    
+    // Automatically process with AI if available
+    toast({
+      title: "OCR Complete",
+      description: "Text extracted successfully. Processing with AI...",
+    })
+    
+    // Process the extracted text
+    setTimeout(async () => {
+      if (useAI && hasAIKey) {
+        await handleProcessWithAI()
+      } else {
+        await handleProcessBasic()
+      }
+    }, 500)
+  }
+
+  const handleOCRError = (error: string) => {
+    toast({
+      title: "OCR Failed",
+      description: error,
+      variant: "destructive"
+    })
   }
 
   return (
     <div 
-      className="border-t bg-muted/30 overflow-hidden transition-all duration-300 ease-in-out"
-      style={{ height: isCollapsed ? '40px' : '350px' }}
+      className="border-t bg-muted/30 overflow-hidden transition-all duration-300 ease-in-out flex flex-col"
+      style={{ height: isCollapsed ? '40px' : '600px' }}
     >
       {/* Header / Title Bar - Always visible */}
       <button
@@ -330,11 +359,29 @@ export function InputSection({ isCollapsed, onToggleCollapse }: InputSectionProp
       </button>
 
       {/* Expandable Content */}
-      <div className="px-4 pb-4 pt-3 space-y-3">
-        <Textarea
-          value={notes}
-          onChange={(e) => setNotes(e.target.value)}
-          placeholder="Paste clinical notes here. Try patterns like:
+      <div className="px-4 pb-4 pt-3 flex-1 flex flex-col overflow-hidden">
+        {/* OCR Upload Section */}
+        <div className="mb-3">
+          <OCRUpload 
+            onTextExtracted={handleOCRTextExtracted}
+            onError={handleOCRError}
+          />
+        </div>
+
+        <div className="relative mb-3">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-border"></div>
+          </div>
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-muted/30 px-2 text-muted-foreground">Or paste text manually</span>
+          </div>
+        </div>
+
+        <div className="flex-1 flex flex-col min-h-0 mb-3">
+          <Textarea
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+            placeholder="Paste clinical notes here. Try patterns like:
 Patient: John Smith
 DOB: 1990-05-15
 Phone: 416-555-1234
@@ -343,8 +390,9 @@ City: Toronto
 Postal: M5V 2K1
 Physician: Dr. Jane Doe
 Allergies: Penicillin, Sulfa"
-          className="h-[250px] resize-none font-mono text-sm bg-background border-border focus:border-primary transition-colors"
-        />
+            className="flex-1 resize-none font-mono text-sm bg-background border-border focus:border-primary transition-colors"
+          />
+        </div>
 
         <div className="flex items-center gap-2 flex-wrap">
           <Button

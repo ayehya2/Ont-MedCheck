@@ -1,12 +1,16 @@
-import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer'
+import { Document, Page, Text, View, StyleSheet, Image } from '@react-pdf/renderer'
 import { MedsCheckFormData } from '@/types/forms'
+
+interface Form2PDFProps {
+  data: MedsCheckFormData
+}
 
 // Styles specific to Form 2 - matching government form layout (PORTRAIT)
 const styles = StyleSheet.create({
   page: {
     padding: 18,
     fontSize: 7,
-    fontFamily: 'Helvetica',
+    fontFamily: 'Times-Roman',
     lineHeight: 1.2,
     color: '#000000',
     backgroundColor: '#FFFFFF'
@@ -20,24 +24,15 @@ const styles = StyleSheet.create({
     borderBottomColor: '#000',
     paddingBottom: 4
   },
-  headerLeft: {
-    flexDirection: 'row',
-    alignItems: 'center'
+  logo: {
+    height: 25,
+    width: 70,
+    objectFit: 'contain'
   },
-  ontarioLogo: {
-    fontSize: 11,
-    fontFamily: 'Helvetica-Bold',
-    color: '#00703C'
-  },
-  ministryText: {
-    fontSize: 6,
-    marginLeft: 6,
-    color: '#000'
-  },
-  medsCheckLogo: {
-    fontSize: 14,
-    fontFamily: 'Helvetica-Bold',
-    color: '#0066CC'
+  medsCheckLogoImage: {
+    height: 25,
+    width: 100,
+    objectFit: 'contain'
   },
   title: {
     fontSize: 12,
@@ -93,8 +88,8 @@ const styles = StyleSheet.create({
   },
   multiFieldRow: {
     flexDirection: 'row',
-    borderWidth: 0.5,
-    borderColor: '#999',
+    borderWidth: 1,
+    borderColor: '#000000',
     marginBottom: 2
   },
   multiFieldCell: {
@@ -241,11 +236,8 @@ export function Form2PDF({ data }: Form2PDFProps) {
       <Page size="LETTER" style={styles.page}>
         {/* Header */}
         <View style={styles.header}>
-          <View style={styles.headerLeft}>
-            <Text style={styles.ontarioLogo}>Ontario</Text>
-            <Text style={styles.ministryText}>Ministry of Health and Long-Term Care</Text>
-          </View>
-          <Text style={styles.medsCheckLogo}>MedsCheck</Text>
+          <Image src='/ontario-logo.png' style={styles.logo} />
+          <Image src='/medscheck-logo.png' style={styles.medsCheckLogoImage} />
         </View>
 
         {/* Title */}
@@ -438,7 +430,14 @@ export function Form2PDF({ data }: Form2PDFProps) {
         <View style={styles.signatureSection}>
           <View style={styles.signatureField}>
             <Text style={styles.cellLabel}>Patient/ Agent Signature</Text>
-            <Text style={{ ...styles.cellValue, fontStyle: 'italic', minHeight: 20 }}>{form2.patientSignature}</Text>
+            {form2.patientSignature && form2.patientSignature.startsWith('data:image') ? (
+              <Image 
+                src={form2.patientSignature} 
+                style={{ height: 30, objectFit: 'contain', marginTop: 2 }}
+              />
+            ) : (
+              <Text style={{ ...styles.cellValue, fontStyle: 'italic', minHeight: 20 }}>{form2.patientSignature}</Text>
+            )}
           </View>
           <View style={styles.signatureFieldLast}>
             <Text style={styles.cellLabel}>Date (yyyy/mm/dd)</Text>

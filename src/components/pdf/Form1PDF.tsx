@@ -1,12 +1,17 @@
-import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer'
+import { Document, Page, Text, View, StyleSheet, Image } from '@react-pdf/renderer'
 import { MedsCheckFormData } from '@/types/forms'
+
+interface Form1PDFProps {
+  data: MedsCheckFormData
+  settings?: any
+}
 
 // Styles specific to Form 1
 const styles = StyleSheet.create({
   page: {
     padding: 18,
     fontSize: 9,
-    fontFamily: 'Helvetica',
+    fontFamily: 'Times-Roman',
     lineHeight: 1.3,
     color: '#000000',
     backgroundColor: '#FFFFFF'
@@ -20,24 +25,15 @@ const styles = StyleSheet.create({
     borderBottomColor: '#000',
     paddingBottom: 6
   },
-  headerLeft: {
-    flexDirection: 'row',
-    alignItems: 'center'
+  logo: {
+    height: 30,
+    width: 80,
+    objectFit: 'contain'
   },
-  ontarioLogo: {
-    fontSize: 11,
-    fontFamily: 'Helvetica-Bold',
-    color: '#00703C'
-  },
-  ministryText: {
-    fontSize: 6,
-    marginLeft: 6,
-    color: '#000'
-  },
-  medsCheckLogo: {
-    fontSize: 14,
-    fontFamily: 'Helvetica-Bold',
-    color: '#0066CC'
+  medsCheckLogoImage: {
+    height: 30,
+    width: 120,
+    objectFit: 'contain'
   },
   title: {
     fontSize: 14,
@@ -132,7 +128,7 @@ const styles = StyleSheet.create({
   },
   issuesBox: {
     borderWidth: 1,
-    borderColor: '#333333',
+    borderColor: '#000000',
     minHeight: 80,
     padding: 8,
     marginTop: 4,
@@ -181,19 +177,16 @@ interface Form1PDFProps {
   data: MedsCheckFormData
 }
 
-export function Form1PDF({ data }: Form1PDFProps) {
+// Export just the page content for consolidated PDF
+export function Form1Page({ data }: Form1PDFProps) {
   const form1 = data.form1
 
   return (
-    <Document>
-      <Page size="LETTER" style={styles.page}>
+    <Page size="LETTER" style={styles.page}>
         {/* Header */}
         <View style={styles.header}>
-          <View style={styles.headerLeft}>
-            <Text style={styles.ontarioLogo}>Ontario</Text>
-            <Text style={styles.ministryText}>Ministry of Health and Long-Term Care</Text>
-          </View>
-          <Text style={styles.medsCheckLogo}>MedsCheck</Text>
+          <Image src='/ontario-logo.png' style={styles.logo} />
+          <Image src='/medscheck-logo.png' style={styles.medsCheckLogoImage} />
         </View>
 
         {/* Title */}
@@ -333,11 +326,26 @@ export function Form1PDF({ data }: Form1PDFProps) {
           <View style={styles.signatureGroup}>
             <Text style={styles.signatureLabel}>Pharmacist's Signature</Text>
             <View style={styles.signatureLine}>
-              <Text style={{ fontSize: 9, fontStyle: 'italic' }}>{form1.pharmacistSignature || ''}</Text>
+              {form1.pharmacistSignature && form1.pharmacistSignature.startsWith('data:image') ? (
+                <Image 
+                  src={form1.pharmacistSignature} 
+                  style={{ height: 25, objectFit: 'contain' }}
+                />
+              ) : (
+                <Text style={{ fontSize: 9, fontStyle: 'italic' }}>{form1.pharmacistSignature || ''}</Text>
+              )}
             </View>
           </View>
         </View>
       </Page>
+  )
+}
+
+// Export full document for individual download
+export function Form1PDF({ data }: Form1PDFProps) {
+  return (
+    <Document>
+      <Form1Page data={data} />
     </Document>
   )
 }

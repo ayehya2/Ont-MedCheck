@@ -1,5 +1,9 @@
-import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer'
+import { Document, Page, Text, View, StyleSheet, Image } from '@react-pdf/renderer'
 import { MedsCheckFormData } from '@/types/forms'
+
+interface Form4PDFProps {
+  data: MedsCheckFormData
+}
 
 // Register Times New Roman font (using built-in Times-Roman as fallback)
 // For true Times New Roman, you'd need to register the actual font file
@@ -16,7 +20,23 @@ const styles = StyleSheet.create({
   },
   // Header
   header: {
-    marginBottom: 8
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#000',
+    paddingBottom: 6
+  },
+  logo: {
+    height: 30,
+    width: 80,
+    objectFit: 'contain'
+  },
+  medsCheckLogoImage: {
+    height: 30,
+    width: 120,
+    objectFit: 'contain'
   },
   title: {
     fontSize: 14,
@@ -196,8 +216,14 @@ export function Form4PDF({ data }: Form4PDFProps) {
     <Document>
       {/* PAGE 1 - Demographics and Interview Location */}
       <Page size="LETTER" style={styles.page}>
-        {/* Title */}
+        {/* Header with logos */}
         <View style={styles.header}>
+          <Image src='/ontario-logo.png' style={styles.logo} />
+          <Image src='/medscheck-logo.png' style={styles.medsCheckLogoImage} />
+        </View>
+
+        {/* Title */}
+        <View style={{ marginBottom: 8 }}>
           <Text style={styles.title}>Pharmacists Worksheet</Text>
         </View>
 

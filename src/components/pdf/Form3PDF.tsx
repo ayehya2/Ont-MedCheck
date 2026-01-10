@@ -1,12 +1,16 @@
-import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer'
+import { Document, Page, Text, View, StyleSheet, Image } from '@react-pdf/renderer'
 import { MedsCheckFormData } from '@/types/forms'
+
+interface Form3PDFProps {
+  data: MedsCheckFormData
+}
 
 // Styles for Form 3 - Personal Medication Record
 const styles = StyleSheet.create({
   page: {
     padding: 18,
     fontSize: 7,
-    fontFamily: 'Helvetica',
+    fontFamily: 'Times-Roman',
     lineHeight: 1.2,
     color: '#000000',
     backgroundColor: '#FFFFFF'
@@ -20,24 +24,15 @@ const styles = StyleSheet.create({
     borderBottomColor: '#000',
     paddingBottom: 4
   },
-  headerLeft: {
-    flexDirection: 'row',
-    alignItems: 'center'
+  logo: {
+    height: 25,
+    width: 70,
+    objectFit: 'contain'
   },
-  ontarioLogo: {
-    fontSize: 11,
-    fontFamily: 'Helvetica-Bold',
-    color: '#00703C'
-  },
-  ministryText: {
-    fontSize: 6,
-    marginLeft: 6,
-    color: '#000'
-  },
-  medsCheckLogo: {
-    fontSize: 14,
-    fontFamily: 'Helvetica-Bold',
-    color: '#0066CC'
+  medsCheckLogoImage: {
+    height: 25,
+    width: 100,
+    objectFit: 'contain'
   },
   title: {
     fontSize: 14,
@@ -269,11 +264,8 @@ export function Form3PDF({ data }: Form3PDFProps) {
       <Page size="LETTER" orientation="landscape" style={styles.page}>
         {/* Header */}
         <View style={styles.header}>
-          <View style={styles.headerLeft}>
-            <Text style={styles.ontarioLogo}>Ontario</Text>
-            <Text style={styles.ministryText}>Ministry of Health and Long-Term Care</Text>
-          </View>
-          <Text style={styles.medsCheckLogo}>MedsCheck</Text>
+          <Image src='/ontario-logo.png' style={styles.logo} />
+          <Image src='/medscheck-logo.png' style={styles.medsCheckLogoImage} />
         </View>
 
         {/* Title */}
@@ -496,7 +488,14 @@ export function Form3PDF({ data }: Form3PDFProps) {
             </View>
             <View style={{ ...styles.pharmacyCell, flex: 1 }}>
               <Text style={styles.cellLabel}>Pharmacist's Signature</Text>
-              <Text style={{ ...styles.cellValue, fontStyle: 'italic' }}>{form3.pharmacistSignature}</Text>
+              {form3.pharmacistSignature && form3.pharmacistSignature.startsWith('data:image') ? (
+                <Image 
+                  src={form3.pharmacistSignature} 
+                  style={{ height: 25, objectFit: 'contain', marginTop: 2 }}
+                />
+              ) : (
+                <Text style={{ ...styles.cellValue, fontStyle: 'italic' }}>{form3.pharmacistSignature}</Text>
+              )}
             </View>
             <View style={{ ...styles.pharmacyCell, flex: 1 }}>
               <Text style={styles.cellLabel}>Date MedsCheck Report Completed (yyyy/mm/dd)</Text>

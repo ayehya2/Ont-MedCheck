@@ -14,6 +14,7 @@ MedsCheck Forms streamlines the documentation process for Ontario's MedsCheck pr
 ## ✨ Key Features
 
 ### 🤖 AI-Powered Data Extraction
+- **OCR Support**: Upload images of patient profiles, prescriptions, or medical records
 - Paste clinical notes into the input section
 - AI automatically extracts and populates:
   - Patient demographics (name, DOB, health card, contact info)
@@ -22,6 +23,20 @@ MedsCheck Forms streamlines the documentation process for Ontario's MedsCheck pr
   - Medications with strengths, directions, and indications
   - Allergies and medical conditions
   - Service details and clinical assessments
+
+### ✍️ Digital Signatures
+- Draw signatures with mouse/touchpad
+- Upload signature images
+- Signatures appear in downloaded PDFs
+
+### 📄 Professional PDF Generation
+- Live preview with 100ms update (near-instant)
+- Download individual forms or all 4 at once
+- **Note**: PDFs are currently static (flattened)
+  - Text fields cannot be edited after download
+  - Checkboxes cannot be clicked in PDF readers
+  - This is standard for most form PDFs and suitable for record-keeping
+  - See `PDF_EDITABILITY_NOTES.md` for technical details on making PDFs fillable
   
 ### 📄 Complete Form Coverage
 1. **Form 1**: Annual/Follow-up Summary & Action Plan

@@ -6,6 +6,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { PhoneInput } from '@/components/ui/phone-input'
+import { SignaturePad } from '@/components/ui/signature-pad'
 import {
   Select,
   SelectContent,
@@ -25,10 +26,10 @@ interface FormFieldProps {
 
 function FormField({ label, required, children }: FormFieldProps) {
   return (
-    <div className="space-y-1.5">
-      <Label className="text-sm font-medium">
+    <div className="space-y-2">
+      <Label className="text-sm font-semibold">
         {label}
-        {required && <span className="text-destructive ml-1">*</span>}
+        {required && <span className="text-destructive ml-1 font-bold">*</span>}
       </Label>
       {children}
     </div>
@@ -43,8 +44,8 @@ interface FormSectionProps {
 
 function FormSection({ title, children }: FormSectionProps) {
   return (
-    <div className="space-y-4">
-      <h3 className="text-sm font-semibold text-primary border-b border-border pb-2">
+    <div className="border-2 border-border rounded-lg p-5 space-y-4 bg-card/30">
+      <h3 className="text-base font-bold text-primary pb-2 border-b-2 border-border">
         {title}
       </h3>
       <div className="space-y-4">
@@ -95,11 +96,11 @@ export function Form3Fields() {
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <div className="p-4 space-y-4 custom-scrollbar">
+    <div className="p-6 space-y-6 custom-scrollbar">
       {/* Form Title - matching Form2 style */}
-      <div className="bg-primary/10 rounded-lg p-3">
-        <h2 className="text-base font-bold text-primary">Personal Medication Record</h2>
-        <p className="text-xs text-muted-foreground mt-0.5">
+      <div className="border-2 border-primary rounded-lg p-4 bg-primary/5">
+        <h2 className="text-lg font-bold text-primary">Personal Medication Record</h2>
+        <p className="text-sm text-muted-foreground mt-1">
           Form 4968E - Ministry of Health and Long-Term Care
         </p>
       </div>
@@ -414,13 +415,6 @@ export function Form3Fields() {
               onChange={(e) => handleChange('pharmacistName', e.target.value)}
             />
           </FormField>
-          <FormField label="Pharmacist's Signature">
-            <Input
-              value={form3.pharmacistSignature}
-              onChange={(e) => handleChange('pharmacistSignature', e.target.value)}
-              placeholder="Type name as signature"
-            />
-          </FormField>
           <FormField label="Date MedsCheck Report Completed">
             <Input
               type="date"
@@ -428,6 +422,13 @@ export function Form3Fields() {
               onChange={(e) => handleChange('dateCompleted', e.target.value)}
             />
           </FormField>
+        </div>
+        <div className="mt-4">
+          <SignaturePad
+            value={form3.pharmacistSignature}
+            onChange={(signature) => handleChange('pharmacistSignature', signature)}
+            label="Pharmacist's Signature"
+          />
         </div>
       </FormSection>
     </div>

@@ -2,6 +2,7 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { PhoneInput } from '@/components/ui/phone-input'
+import { SignaturePad } from '@/components/ui/signature-pad'
 import { useFormData } from '@/context/FormDataContext'
 import { useEffect } from 'react'
 
@@ -13,10 +14,10 @@ interface FormFieldProps {
 
 function FormField({ label, required, children }: FormFieldProps) {
   return (
-    <div className="space-y-1">
-      <Label className="text-xs font-medium">
+    <div className="space-y-2">
+      <Label className="text-sm font-semibold">
         {label}
-        {required && <span className="text-destructive ml-1">*</span>}
+        {required && <span className="text-destructive ml-1 font-bold">*</span>}
       </Label>
       {children}
     </div>
@@ -30,11 +31,11 @@ interface FormSectionProps {
 
 function FormSection({ title, children }: FormSectionProps) {
   return (
-    <div className="space-y-3">
-      <h3 className="text-sm font-semibold text-primary border-b border-border pb-1.5">
+    <div className="border-2 border-border rounded-lg p-4 space-y-3 bg-card/30">
+      <h3 className="text-base font-bold text-primary pb-2 border-b-2 border-border">
         {title}
       </h3>
-      <div className="space-y-3">
+      <div className="space-y-2.5">
         {children}
       </div>
     </div>
@@ -59,13 +60,13 @@ export function Form1Fields() {
   }
 
   return (
-    <div className="p-4 space-y-4 custom-scrollbar">
+    <div className="p-6 space-y-4 custom-scrollbar">
       {/* Form Title */}
-      <div className="bg-primary/10 rounded-lg p-3">
-        <h2 className="text-base font-bold text-primary">
+      <div className="border-2 border-primary rounded-lg p-4 bg-primary/5">
+        <h2 className="text-lg font-bold text-primary">
           Form 1: Healthcare Provider Notification of MedsCheck Services
         </h2>
-        <p className="text-xs text-muted-foreground mt-0.5">
+        <p className="text-sm text-muted-foreground mt-1">
           Complete this form to notify the patient's healthcare provider about the MedsCheck consultation.
         </p>
       </div>
@@ -78,7 +79,7 @@ export function Form1Fields() {
               value={form1.to}
               onChange={(e) => updateField('form1.to', e.target.value)}
               placeholder="Recipient name"
-              className="h-8 text-sm"
+              className="h-9"
             />
           </FormField>
           <FormField label="Fax Number">
@@ -88,7 +89,7 @@ export function Form1Fields() {
             />
           </FormField>
         </div>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-3">
           <FormField label="Telephone Number">
             <PhoneInput
               value={form1.telephoneNumber}
@@ -100,16 +101,18 @@ export function Form1Fields() {
               value={form1.pages}
               onChange={(e) => updateField('form1.pages', e.target.value)}
               placeholder="Number of pages"
+              className="h-9"
             />
           </FormField>
         </div>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-3">
           <FormField label="Email Address">
             <Input
               type="email"
               value={form1.emailAddress}
               onChange={(e) => updateField('form1.emailAddress', e.target.value)}
               placeholder="email@example.com"
+              className="h-9"
             />
           </FormField>
           <FormField label="Date (yyyy/mm/dd)">
@@ -117,6 +120,7 @@ export function Form1Fields() {
               type="date"
               value={form1.date}
               onChange={(e) => updateField('form1.date', e.target.value)}
+              className="h-9"
             />
           </FormField>
         </div>
@@ -129,7 +133,7 @@ export function Form1Fields() {
             value={form1.patientName}
             onChange={(e) => updateField('form1.patientName', e.target.value)}
             placeholder="Patient's full name"
-            className={getValidationClass(form1.patientName, true)}
+            className={`h-9 ${getValidationClass(form1.patientName, true)}`}
           />
         </FormField>
         <FormField label="Patient's Address">
@@ -137,6 +141,7 @@ export function Form1Fields() {
             value={form1.patientAddress}
             onChange={(e) => updateField('form1.patientAddress', e.target.value)}
             placeholder="Street address, City, Province, Postal Code"
+            className="h-9"
           />
         </FormField>
         <FormField label="Telephone Number">
@@ -149,14 +154,18 @@ export function Form1Fields() {
 
       {/* Section 3: MedsCheck Date */}
       <FormSection title="MedsCheck Completion">
-        <FormField label="Date MedsCheck Completed (yyyy/mm/dd)" required>
+        <div className="flex items-center gap-3 flex-wrap">
+          <span className="text-sm text-foreground">
+            Our mutual patient noted above has had a MedsCheck completed by our pharmacist on
+          </span>
           <Input
             type="date"
             value={form1.medsCheckDate}
             onChange={(e) => updateField('form1.medsCheckDate', e.target.value)}
-            className={getValidationClass(form1.medsCheckDate, true)}
+            className={`h-9 w-auto ${getValidationClass(form1.medsCheckDate, true)}`}
           />
-        </FormField>
+          <span className="text-sm text-muted-foreground">(yyyy/mm/dd)</span>
+        </div>
       </FormSection>
 
       {/* Section 4: Follow-up Status */}
@@ -205,29 +214,27 @@ export function Form1Fields() {
             value={form1.issues}
             onChange={(e) => updateField('form1.issues', e.target.value)}
             placeholder="Describe any issues identified during the MedsCheck review..."
-            className="min-h-[150px] resize-y"
+            className="h-20 resize-y"
           />
         </FormField>
       </FormSection>
 
       {/* Section 6: Pharmacist Information */}
       <FormSection title="Pharmacist Information">
-        <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-2.5">
           <FormField label="Pharmacist Name" required>
             <Input
               value={form1.pharmacistName}
               onChange={(e) => updateField('form1.pharmacistName', e.target.value)}
               placeholder="Pharmacist's full name"
-              className={getValidationClass(form1.pharmacistName, true)}
+              className={`h-9 ${getValidationClass(form1.pharmacistName, true)}`}
             />
           </FormField>
-          <FormField label="Pharmacist's Signature">
-            <Input
-              value={form1.pharmacistSignature}
-              onChange={(e) => updateField('form1.pharmacistSignature', e.target.value)}
-              placeholder="Type name as signature"
-            />
-          </FormField>
+          <SignaturePad
+            value={form1.pharmacistSignature}
+            onChange={(signature) => updateField('form1.pharmacistSignature', signature)}
+            label="Pharmacist's Signature"
+          />
         </div>
       </FormSection>
     </div>

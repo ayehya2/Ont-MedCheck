@@ -73,9 +73,9 @@ CRITICAL VALIDATION RULES - READ CAREFULLY:
    ✗ WRONG: "Metformin 500mg tablet take 1 twice daily for diabetes"
 
 EXTRACTION INSTRUCTIONS:
-1. Patient names: Look for "patient", "pt:", "name:", followed by actual name. Extract ONLY the name (First Last OR Last, First).
-2. Physician names: Look for "Dr", "Doctor", "send to", "fax to". Extract ONLY name with "Dr" prefix if present.
-3. Pharmacist names: Look for "pharmacist", "reviewed by", "completed by". Extract ONLY the name.
+1. Patient names: Look for "patient", "pt:", "name:", "patient is", "patient name is", followed by actual name. Extract ONLY the name (First Last OR Last, First).
+2. Physician names: Look for "Dr", "Doctor", "send to", "fax to", "physician is", "provider is". Extract ONLY name with "Dr" prefix if present.
+3. Pharmacist names: Look for "pharmacist", "pharmacist name", "pharmacist is", "reviewed by", "completed by", "done by". Extract ONLY the name.
 4. Phone numbers: Find patterns like XXX-XXX-XXXX, (XXX) XXX-XXXX, XXX.XXX.XXXX. Format as (XXX) XXX-XXXX.
 5. Dates: Find patterns like "Jan 18 2024", "2024-01-18", "01/18/2024", "today". Convert to YYYY-MM-DD.
 6. Addresses: Extract unit/apt, street number, street name, city, province, postal code separately.
@@ -89,6 +89,13 @@ EXTRACTION INSTRUCTIONS:
 14. Service type: Look for "annual", "followup", "diabetes", "diabetes followup", "at home".
 15. Interview location: Look for "at pharmacy", "pharmacy premises", "patient's home", "home visit". Set to "pharmacy" or "home".
 16. Follow-up status (Form 1): "no_issues" if stable/well/no problems. "issues_identified" if concerns/problems/issues mentioned.
+
+SIMPLE ONE-LINER EXAMPLES (extract correctly):
+"patient name is john smith" → patientFirstName: "John", patientLastName: "Smith"
+"pharmacist name is sara smith" → pharmacistName: "Sara Smith"
+"reviewed by dr jennifer lee" → providerFirstName: "Jennifer", providerLastName: "Lee"
+"phone 416-555-1234" → phone: "(416) 555-1234"
+"dob 1985-06-15" → patientDOB: "1985-06-15"
 
 COMMON MISTAKES TO AVOID:
 ❌ Don't put full sentences in name fields
@@ -851,6 +858,26 @@ function mergeExtractedData(
   // Sync allergies across forms
   if (result.form4.knownAllergies) {
     result.form3.allergies = result.form4.knownAllergies
+  }
+  
+  // Sync pharmacist name across all forms
+  let pharmacistName = ''
+  if (result.form1.pharmacistName) {
+    pharmacistName = result.form1.pharmacistName
+  } else if (result.form3.pharmacistName) {
+    pharmacistName = result.form3.pharmacistName
+  } else if (result.form4.pharmacistFullName) {
+    pharmacistName = result.form4.pharmacistFullName
+  } else if (result.pharmacy.pharmacistName) {
+    pharmacistName = result.pharmacy.pharmacistName
+  }
+  
+  if (pharmacistName) {
+    result.form1.pharmacistName = pharmacistName
+    result.form1.pharmacistSignature = pharmacistName
+    result.form3.pharmacistName = pharmacistName
+    result.form4.pharmacistFullName = pharmacistName
+    result.pharmacy.pharmacistName = pharmacistName
   }
   
   // Sync medications from Form 4 to Form 3

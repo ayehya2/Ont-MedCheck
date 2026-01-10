@@ -29,10 +29,10 @@ interface FormFieldProps {
 
 function FormField({ label, required, children }: FormFieldProps) {
   return (
-    <div className="space-y-1.5">
-      <Label className="text-sm font-medium">
+    <div className="space-y-2">
+      <Label className="text-sm font-semibold">
         {label}
-        {required && <span className="text-destructive ml-1">*</span>}
+        {required && <span className="text-destructive ml-1 font-bold">*</span>}
       </Label>
       {children}
     </div>
@@ -47,8 +47,8 @@ interface FormSectionProps {
 
 function FormSection({ title, children }: FormSectionProps) {
   return (
-    <div className="space-y-4">
-      <h3 className="text-sm font-semibold bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200 -mx-6 px-6 py-2 border-y border-blue-200 dark:border-blue-800">
+    <div className="border-2 border-border rounded-lg p-5 space-y-4 bg-card/30">
+      <h3 className="text-base font-bold text-primary pb-2 border-b-2 border-border">
         {title}
       </h3>
       <div className="space-y-4">
@@ -91,11 +91,11 @@ export function Form4Fields() {
   }
 
   return (
-    <div className="p-4 space-y-4 custom-scrollbar">
+    <div className="p-6 space-y-6 custom-scrollbar">
       {/* Form Title */}
-      <div className="bg-primary/10 rounded-lg p-3">
-        <h2 className="text-base font-bold text-primary">Form 4: Pharmacists Worksheet</h2>
-        <p className="text-xs text-muted-foreground mt-0.5">
+      <div className="border-2 border-primary rounded-lg p-4 bg-primary/5">
+        <h2 className="text-lg font-bold text-primary">Form 4: Pharmacists Worksheet</h2>
+        <p className="text-sm text-muted-foreground mt-1">
           4-page comprehensive worksheet (Form 4967-47E) — Scroll down to complete all sections
         </p>
       </div>

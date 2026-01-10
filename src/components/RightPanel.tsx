@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 import { Download, Loader2, FileStack } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { FormTab } from './TabBar'
@@ -14,9 +14,10 @@ interface RightPanelProps {
 }
 
 // Custom hook to generate PDF blob URL with debounce
-function usePDFPreview(activeTab: FormTab, data: ReturnType<typeof useFormData>['data']) {
+function usePDFPreview(activeTab: FormTab, data: ReturnType<typeof useFormData>['data'], manualRefresh: number) {
   const [pdfUrl, setPdfUrl] = useState<string | null>(null)
   const [isGenerating, setIsGenerating] = useState(false)
+  const previousUrlRef = useRef<string | null>(null)
 
   // Memoize the document based on active tab and data
   const doc = useMemo(() => {
@@ -42,19 +43,28 @@ function usePDFPreview(activeTab: FormTab, data: ReturnType<typeof useFormData>[
 
     let cancelled = false
     let timeoutId: ReturnType<typeof setTimeout>
-    let currentUrl: string | null = null
 
     const generatePDF = async () => {
       setIsGenerating(true)
       try {
         const blob = await pdf(doc).toBlob()
         if (!cancelled) {
-          // Revoke previous URL if exists
-          if (currentUrl) {
-            URL.revokeObjectURL(currentUrl)
+          const newUrl = URL.createObjectURL(blob)
+          
+          // Keep old URL visible until new one is ready (prevents flicker)
+          setPdfUrl(newUrl)
+          
+          // Revoke old URL after a short delay (after browser has loaded new one)
+          if (previousUrlRef.current) {
+            setTimeout(() => {
+              if (previousUrlRef.current) {
+                URL.revokeObjectURL(previousUrlRef.current)
+              }
+            }, 100)
           }
-          currentUrl = URL.createObjectURL(blob)
-          setPdfUrl(currentUrl)
+          
+          // Store new URL for next cleanup
+          previousUrlRef.current = newUrl
         }
       } catch (error) {
         console.error('PDF preview generation failed:', error)
@@ -68,17 +78,23 @@ function usePDFPreview(activeTab: FormTab, data: ReturnType<typeof useFormData>[
       }
     }
 
-    // Debounce PDF generation to avoid too frequent updates
-    timeoutId = setTimeout(generatePDF, 300)
+    // Near-instant updates with minimal 100ms debounce for live preview
+    timeoutId = setTimeout(generatePDF, 100)
 
     return () => {
       cancelled = true
       clearTimeout(timeoutId)
-      if (currentUrl) {
-        URL.revokeObjectURL(currentUrl)
+    }
+  }, [doc, manualRefresh])
+
+  // Cleanup all URLs on unmount
+  useEffect(() => {
+    return () => {
+      if (previousUrlRef.current) {
+        URL.revokeObjectURL(previousUrlRef.current)
       }
     }
-  }, [doc])
+  }, [])
 
   return { pdfUrl, isGenerating }
 }
@@ -87,7 +103,8 @@ export function RightPanel({ activeTab }: RightPanelProps) {
   const { data } = useFormData()
   const [isDownloading, setIsDownloading] = useState(false)
   const [isDownloadingAll, setIsDownloadingAll] = useState(false)
-  const { pdfUrl, isGenerating } = usePDFPreview(activeTab, data)
+  const [manualRefresh, setManualRefresh] = useState(0)
+  const { pdfUrl, isGenerating } = usePDFPreview(activeTab, data, manualRefresh)
 
   const handleDownloadAll = async () => {
     setIsDownloadingAll(true)
@@ -213,13 +230,31 @@ export function RightPanel({ activeTab }: RightPanelProps) {
   }
 
   return (
-    <div className="w-1/2 flex flex-col overflow-hidden pdf-preview-container bg-background">
+    <div className="flex flex-col overflow-hidden pdf-preview-container bg-background h-full w-full">
       {/* Toolbar */}
       <div className="flex items-center justify-between px-4 py-2 border-b border-border bg-card">
-        <span className="text-sm font-medium text-foreground">
-          Form {activeTab} Preview
-        </span>
+        <div className="text-sm font-medium">
+          Preview - Form {activeTab}
+        </div>
+
         <div className="flex items-center gap-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setManualRefresh(prev => prev + 1)}
+            disabled={isGenerating}
+            className="gap-2"
+            title="Refresh PDF preview now"
+          >
+            {isGenerating ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+            )}
+            Refresh
+          </Button>
           <Button
             variant="outline"
             size="sm"
@@ -252,7 +287,7 @@ export function RightPanel({ activeTab }: RightPanelProps) {
         </div>
       </div>
 
-      {/* PDF Preview Area */}
+      {/* PDF Preview */}
       <div className="flex-1 overflow-hidden">
         {renderPDFPreview()}
       </div>

@@ -23,23 +23,23 @@ export function TabBar({ activeTab, onTabChange }: TabBarProps) {
             key={tab}
             onClick={() => onTabChange(tab)}
             className={cn(
-              "flex-1 py-2 px-3 text-center transition-all duration-200 border-b-2",
+              "flex-1 py-4 px-4 text-center transition-all duration-200 border-b-2",
               "hover:bg-accent/50",
               activeTab === tab
                 ? "bg-primary/10 border-primary text-primary"
                 : "bg-card border-transparent text-muted-foreground hover:text-foreground"
             )}
           >
-            <div className="flex flex-col items-center gap-0.5">
+            <div className="flex flex-col items-center gap-1">
               <span className={cn(
-                "text-xs font-semibold",
+                "text-base font-bold",
                 activeTab === tab ? "text-primary" : "text-foreground"
               )}>
                 {tabLabels[tab].title}
               </span>
               <span className={cn(
-                "text-[9px] hidden sm:block",
-                activeTab === tab ? "text-primary/70" : "text-muted-foreground"
+                "text-sm",
+                activeTab === tab ? "text-primary/80" : "text-muted-foreground"
               )}>
                 {tabLabels[tab].subtitle}
               </span>
