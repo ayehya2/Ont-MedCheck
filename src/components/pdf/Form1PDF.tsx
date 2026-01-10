@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 14,
     fontFamily: 'Helvetica-Bold',
-    textAlign: 'center',
+    textAlign: 'left',
     marginBottom: 16
   },
   row: {

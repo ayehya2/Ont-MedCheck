@@ -37,9 +37,9 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 12,
     fontFamily: 'Helvetica-Bold',
-    textAlign: 'center',
+    textAlign: 'left',
     marginBottom: 6,
-    color: '#000080'
+    color: '#000000'
   },
   subtitle: {
     fontSize: 7,
