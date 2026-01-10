@@ -77,8 +77,6 @@ function MainApp() {
     // The handle is at the TOP of the input section, so:
     // - Moving mouse DOWN should INCREASE height (make section taller)
     // - Moving mouse UP should DECREASE height (make section shorter)
-    const rect = inputSection.getBoundingClientRect()
-    const handleY = rect.top
     const newHeight = window.innerHeight - e.clientY
 
     // Clamp between 200px and 800px
