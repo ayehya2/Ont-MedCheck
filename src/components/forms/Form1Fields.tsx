@@ -52,7 +52,7 @@ export function Form1Fields() {
 
   // Helper to get validation class
   const getValidationClass = (value: string, required: boolean) => {
-    if (required && !value.trim()) {
+    if (required && (!value || !value.trim())) {
       return 'border-destructive focus-visible:ring-destructive'
     }
     return ''

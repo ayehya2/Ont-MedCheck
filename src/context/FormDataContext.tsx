@@ -30,6 +30,25 @@ interface FormDataContextValue extends FormDataState {
 
 const FormDataContext = createContext<FormDataContextValue | undefined>(undefined)
 
+// Helper function to sanitize loaded data - convert null to empty string
+function sanitizeFormData(data: MedsCheckFormData): MedsCheckFormData {
+  const sanitizeObject = (obj: any): any => {
+    if (obj === null || obj === undefined) return ''
+    if (typeof obj === 'string') return obj
+    if (typeof obj === 'number' || typeof obj === 'boolean') return obj
+    if (Array.isArray(obj)) return obj.map(sanitizeObject)
+    if (typeof obj === 'object') {
+      const result: any = {}
+      for (const key in obj) {
+        result[key] = sanitizeObject(obj[key])
+      }
+      return result
+    }
+    return obj
+  }
+  return sanitizeObject(data)
+}
+
 // Helper function to set nested object value by path
 function setNestedValue(obj: Record<string, unknown>, path: string, value: unknown): Record<string, unknown> {
   const keys = path.split('.')
@@ -140,7 +159,8 @@ export function FormDataProvider({ children }: { children: React.ReactNode }) {
       const stored = localStorage.getItem(STORAGE_KEY)
       if (stored) {
         const parsed = JSON.parse(stored) as MedsCheckFormData
-        dispatch({ type: 'LOAD_FROM_STORAGE', payload: parsed })
+        const sanitized = sanitizeFormData(parsed)
+        dispatch({ type: 'LOAD_FROM_STORAGE', payload: sanitized })
       } else {
         dispatch({ type: 'SET_LOADING', payload: false })
       }
