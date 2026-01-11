@@ -1,13 +1,19 @@
-import { useState, useEffect, useMemo, useRef } from 'react'
-import { Download, Loader2, FileStack } from 'lucide-react'
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react'
+import { Download, Loader2, FileStack, ZoomIn, ZoomOut } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { FormTab } from './TabBar'
 import { pdf } from '@react-pdf/renderer'
+import { Document, Page, pdfjs } from 'react-pdf'
+import 'react-pdf/dist/Page/AnnotationLayer.css'
+import 'react-pdf/dist/Page/TextLayer.css'
 import { Form1PDF } from './pdf/Form1PDF'
 import { Form2PDF } from './pdf/Form2PDF'
 import { Form3PDF } from './pdf/Form3PDF'
 import { Form4PDF } from './pdf/Form4PDF'
 import { useFormData } from '@/context/FormDataContext'
+
+// Configure PDF.js worker
+pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`
 
 interface RightPanelProps {
   activeTab: FormTab
@@ -18,7 +24,6 @@ function usePDFPreview(activeTab: FormTab, data: ReturnType<typeof useFormData>[
   const [pdfUrl, setPdfUrl] = useState<string | null>(null)
   const [isGenerating, setIsGenerating] = useState(false)
   const previousUrlRef = useRef<string | null>(null)
-  const scrollPositionRef = useRef<number>(0)
 
   // Memoize the document based on active tab and data
   const doc = useMemo(() => {
@@ -79,8 +84,8 @@ function usePDFPreview(activeTab: FormTab, data: ReturnType<typeof useFormData>[
       }
     }
 
-    // Near-instant updates with minimal 100ms debounce for live preview
-    timeoutId = setTimeout(generatePDF, 100)
+    // Debounce PDF generation - 150ms for responsive feel without too many updates
+    timeoutId = setTimeout(generatePDF, 150)
 
     return () => {
       cancelled = true
@@ -97,7 +102,7 @@ function usePDFPreview(activeTab: FormTab, data: ReturnType<typeof useFormData>[
     }
   }, [])
 
-  return { pdfUrl, isGenerating, scrollPositionRef }
+  return { pdfUrl, isGenerating }
 }
 
 export function RightPanel({ activeTab }: RightPanelProps) {
@@ -105,67 +110,64 @@ export function RightPanel({ activeTab }: RightPanelProps) {
   const [isDownloading, setIsDownloading] = useState(false)
   const [isDownloadingAll, setIsDownloadingAll] = useState(false)
   const [manualRefresh, setManualRefresh] = useState(0)
-  const [currentPage, setCurrentPage] = useState(1)
-  const iframeRef = useRef<HTMLIFrameElement>(null)
+  const [numPages, setNumPages] = useState<number>(0)
+  const [scale, setScale] = useState(1.0)
   const scrollContainerRef = useRef<HTMLDivElement>(null)
-  const { pdfUrl, isGenerating, scrollPositionRef } = usePDFPreview(activeTab, data, manualRefresh)
+  const scrollPositionRef = useRef<number>(0)
+  const isRestoringScrollRef = useRef(false)
+  const { pdfUrl, isGenerating } = usePDFPreview(activeTab, data, manualRefresh)
   
-  // Reset page to 1 when switching tabs
+  // Save scroll position before PDF regenerates
   useEffect(() => {
-    setCurrentPage(1)
+    if (isGenerating && scrollContainerRef.current) {
+      scrollPositionRef.current = scrollContainerRef.current.scrollTop
+    }
+  }, [isGenerating])
+  
+  // Restore scroll position after PDF loads
+  const restoreScrollPosition = useCallback(() => {
+    if (scrollContainerRef.current && scrollPositionRef.current > 0 && !isRestoringScrollRef.current) {
+      isRestoringScrollRef.current = true
+      // Small delay to ensure pages are rendered
+      requestAnimationFrame(() => {
+        if (scrollContainerRef.current) {
+          scrollContainerRef.current.scrollTop = scrollPositionRef.current
+        }
+        isRestoringScrollRef.current = false
+      })
+    }
+  }, [])
+
+  // Reset scroll when switching tabs
+  useEffect(() => {
+    scrollPositionRef.current = 0
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTop = 0
+    }
   }, [activeTab])
-  
-  // Save scroll position to localStorage periodically
-  useEffect(() => {
-    const container = scrollContainerRef.current
-    if (!container) return
-    
-    const saveScrollPosition = () => {
-      const scrollTop = container.scrollTop
-      scrollPositionRef.current = scrollTop
-      localStorage.setItem(`pdf_scroll_form${activeTab}`, scrollTop.toString())
-    }
-    
-    // Throttled scroll handler
-    let scrollTimeout: ReturnType<typeof setTimeout>
-    const handleScroll = () => {
-      clearTimeout(scrollTimeout)
-      scrollTimeout = setTimeout(saveScrollPosition, 100)
-    }
-    
-    container.addEventListener('scroll', handleScroll)
-    return () => {
-      container.removeEventListener('scroll', handleScroll)
-      clearTimeout(scrollTimeout)
-    }
-  }, [activeTab, scrollPositionRef])
-  
-  // Restore scroll position when PDF URL changes
-  useEffect(() => {
-    if (!pdfUrl || !scrollContainerRef.current) return
-    
-    const container = scrollContainerRef.current
-    const savedScroll = localStorage.getItem(`pdf_scroll_form${activeTab}`)
-    
-    if (savedScroll) {
-      // Wait for iframe to load
-      setTimeout(() => {
-        container.scrollTop = parseInt(savedScroll, 10)
-      }, 150)
-    }
-  }, [pdfUrl, activeTab])
+
+  const onDocumentLoadSuccess = useCallback(({ numPages }: { numPages: number }) => {
+    setNumPages(numPages)
+    // Restore scroll after document loads
+    restoreScrollPosition()
+  }, [restoreScrollPosition])
+
+  const handleZoomIn = () => {
+    setScale(prev => Math.min(prev + 0.25, 3.0))
+  }
+
+  const handleZoomOut = () => {
+    setScale(prev => Math.max(prev - 0.25, 0.5))
+  }
 
   const handleDownloadAll = async () => {
     setIsDownloadingAll(true)
     try {
-      // Create a consolidated PDF with all 4 forms
       const patientName = data.form1.patientName.replace(/\s+/g, '_') || 
                          `${data.form2.patientLastName}_${data.form2.patientFirstName}`.replace(/\s+/g, '_') || 
                          'Patient'
       const date = data.form1.date || new Date().toISOString().split('T')[0]
       
-      // We need to combine all PDFs - React-PDF doesn't support multi-document PDFs directly
-      // So we'll download them sequentially with bookmarks in filenames
       const forms = [
         { doc: <Form1PDF data={data} />, name: '1_Healthcare_Provider_Notification' },
         { doc: <Form2PDF data={data} />, name: '2_Patient_Acknowledgement' },
@@ -173,10 +175,8 @@ export function RightPanel({ activeTab }: RightPanelProps) {
         { doc: <Form4PDF data={data} />, name: '4_Pharmacist_Worksheet' }
       ]
 
-      // Create a single combined filename
       const baseFilename = `MedsCheck_AllForms_${patientName}_${date}`
       
-      // Download each PDF with numbered prefix
       for (const form of forms) {
         const blob = await pdf(form.doc).toBlob()
         const url = URL.createObjectURL(blob)
@@ -188,7 +188,6 @@ export function RightPanel({ activeTab }: RightPanelProps) {
         document.body.removeChild(link)
         URL.revokeObjectURL(url)
         
-        // Small delay between downloads to avoid browser blocking
         await new Promise(resolve => setTimeout(resolve, 200))
       }
     } catch (error) {
@@ -250,7 +249,7 @@ export function RightPanel({ activeTab }: RightPanelProps) {
     }
   }
 
-  // Render PDF preview based on active tab
+  // Render PDF preview using react-pdf
   const renderPDFPreview = () => {
     // Show loading state
     if (isGenerating && !pdfUrl) {
@@ -264,23 +263,40 @@ export function RightPanel({ activeTab }: RightPanelProps) {
       )
     }
 
-    // Show PDF in iframe/object
+    // Show PDF using react-pdf
     if (pdfUrl) {
       return (
-        <div style={{ width: '100%', height: '100%', position: 'relative' }}>
-          <object
-            data={`${pdfUrl}#toolbar=0&navpanes=0&scrollbar=1&page=${currentPage}&zoom=page-width`}
-            type="application/pdf"
-            style={{ width: '100%', height: '100%', border: 'none' }}
-            title={`Form ${activeTab} PDF Preview`}
+        <div 
+          ref={scrollContainerRef}
+          className="flex-1 overflow-auto bg-gray-100 dark:bg-gray-800"
+          style={{ height: '100%' }}
+        >
+          <Document
+            file={pdfUrl}
+            onLoadSuccess={onDocumentLoadSuccess}
+            loading={
+              <div className="flex items-center justify-center p-8">
+                <Loader2 className="h-6 w-6 animate-spin" />
+              </div>
+            }
+            error={
+              <div className="flex items-center justify-center p-8 text-red-500">
+                Failed to load PDF
+              </div>
+            }
+            className="flex flex-col items-center py-4 gap-4"
           >
-            <iframe
-              ref={iframeRef}
-              src={`${pdfUrl}#toolbar=0&navpanes=0&scrollbar=1&page=${currentPage}&zoom=page-width`}
-              style={{ width: '100%', height: '100%', border: 'none' }}
-              title={`Form ${activeTab} PDF Preview`}
-            />
-          </object>
+            {Array.from(new Array(numPages), (_, index) => (
+              <Page
+                key={`page_${index + 1}`}
+                pageNumber={index + 1}
+                scale={scale}
+                className="shadow-lg"
+                renderTextLayer={true}
+                renderAnnotationLayer={true}
+              />
+            ))}
+          </Document>
         </div>
       )
     }
@@ -296,37 +312,35 @@ export function RightPanel({ activeTab }: RightPanelProps) {
           <div className="text-sm font-medium">
             Preview - Form {activeTab}
           </div>
-          {pdfUrl && (
-            <div className="flex items-center gap-2">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
-                disabled={currentPage === 1}
-                className="h-7 w-7 p-0"
-                title="Previous page"
-              >
-                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
-              </Button>
-              <span className="text-xs text-muted-foreground">Page {currentPage}</span>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setCurrentPage(prev => prev + 1)}
-                className="h-7 w-7 p-0"
-                title="Next page"
-              >
-                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </Button>
-            </div>
+          {numPages > 0 && (
+            <span className="text-xs text-muted-foreground">
+              {numPages} page{numPages > 1 ? 's' : ''}
+            </span>
           )}
-          <div className="text-xs text-muted-foreground flex items-center gap-1">
-            <span>•</span>
-            <span>Ctrl + Scroll to zoom</span>
+          <div className="flex items-center gap-1 ml-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleZoomOut}
+              disabled={scale <= 0.5}
+              className="h-7 w-7 p-0"
+              title="Zoom out"
+            >
+              <ZoomOut className="h-4 w-4" />
+            </Button>
+            <span className="text-xs text-muted-foreground w-12 text-center">
+              {Math.round(scale * 100)}%
+            </span>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleZoomIn}
+              disabled={scale >= 3.0}
+              className="h-7 w-7 p-0"
+              title="Zoom in"
+            >
+              <ZoomIn className="h-4 w-4" />
+            </Button>
           </div>
         </div>
         <div className="flex items-center gap-2">
