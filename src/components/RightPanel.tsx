@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react'
 import { Download, Loader2, FileStack, ZoomIn, ZoomOut } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { FormTab } from './TabBar'
+import { FormSection } from './ContinuousFormView'
 import { pdf } from '@react-pdf/renderer'
 import { Document, Page, pdfjs } from 'react-pdf'
 import 'react-pdf/dist/Page/AnnotationLayer.css'
@@ -16,11 +16,18 @@ import { useFormData } from '@/context/FormDataContext'
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`
 
 interface RightPanelProps {
-  activeTab: FormTab
+  activeSection: FormSection
 }
 
+const formTabs = [
+  { id: 1 as FormSection, label: 'Form 1' },
+  { id: 2 as FormSection, label: 'Form 2' },
+  { id: 3 as FormSection, label: 'Form 3' },
+  { id: 4 as FormSection, label: 'Form 4' },
+]
+
 // Custom hook to generate PDF blob URL with debounce
-function usePDFPreview(activeTab: FormTab, data: ReturnType<typeof useFormData>['data'], manualRefresh: number) {
+function usePDFPreview(activeTab: FormSection, data: ReturnType<typeof useFormData>['data'], manualRefresh: number) {
   const [pdfUrl, setPdfUrl] = useState<string | null>(null)
   const [isGenerating, setIsGenerating] = useState(false)
   const previousUrlRef = useRef<string | null>(null)
@@ -105,17 +112,36 @@ function usePDFPreview(activeTab: FormTab, data: ReturnType<typeof useFormData>[
   return { pdfUrl, isGenerating }
 }
 
-export function RightPanel({ activeTab }: RightPanelProps) {
+export function RightPanel({ activeSection }: RightPanelProps) {
   const { data } = useFormData()
   const [isDownloading, setIsDownloading] = useState(false)
   const [isDownloadingAll, setIsDownloadingAll] = useState(false)
   const [manualRefresh, setManualRefresh] = useState(0)
   const [numPages, setNumPages] = useState<number>(0)
   const [scale, setScale] = useState(1.0)
+  const [selectedTab, setSelectedTab] = useState<FormSection>(activeSection)
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const scrollPositionRef = useRef<number>(0)
   const isRestoringScrollRef = useRef(false)
-  const { pdfUrl, isGenerating } = usePDFPreview(activeTab, data, manualRefresh)
+  const { pdfUrl, isGenerating } = usePDFPreview(selectedTab, data, manualRefresh)
+  
+  // Auto-sync tab with scroll position (can be overridden by manual tab click)
+  const [isAutoSync, setIsAutoSync] = useState(true)
+  
+  // Update selected tab when activeSection changes (from scroll)
+  useEffect(() => {
+    if (isAutoSync) {
+      setSelectedTab(activeSection)
+    }
+  }, [activeSection, isAutoSync])
+  
+  // Manual tab selection
+  const handleTabClick = (tabId: FormSection) => {
+    setSelectedTab(tabId)
+    setIsAutoSync(false)
+    // Re-enable auto-sync after 3 seconds of no manual interaction
+    setTimeout(() => setIsAutoSync(true), 3000)
+  }
   
   // Save scroll position before PDF regenerates
   useEffect(() => {
@@ -144,7 +170,7 @@ export function RightPanel({ activeTab }: RightPanelProps) {
     if (scrollContainerRef.current) {
       scrollContainerRef.current.scrollTop = 0
     }
-  }, [activeTab])
+  }, [selectedTab])
 
   const onDocumentLoadSuccess = useCallback(({ numPages }: { numPages: number }) => {
     setNumPages(numPages)
@@ -203,7 +229,7 @@ export function RightPanel({ activeTab }: RightPanelProps) {
       let doc
       let filename = 'MedsCheck_Form'
 
-      switch (activeTab) {
+      switch (selectedTab) {
         case 1:
           doc = <Form1PDF data={data} />
           const patientName1 = data.form1.patientName.replace(/\s+/g, '_') || 'Patient'
@@ -306,11 +332,33 @@ export function RightPanel({ activeTab }: RightPanelProps) {
 
   return (
     <div className="flex flex-col overflow-hidden pdf-preview-container bg-background h-full w-full">
+      {/* PDF Tab Bar */}
+      <div className="flex items-center border-b border-border bg-muted/30">
+        {formTabs.map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => handleTabClick(tab.id)}
+            className={`px-4 py-2 text-sm font-medium transition-colors border-b-2 -mb-[1px] ${
+              selectedTab === tab.id
+                ? 'border-primary text-primary bg-background'
+                : 'border-transparent text-muted-foreground hover:text-foreground hover:bg-muted/50'
+            }`}
+          >
+            {tab.label}
+          </button>
+        ))}
+        {!isAutoSync && (
+          <span className="ml-2 text-xs text-muted-foreground px-2 py-0.5 bg-muted rounded">
+            Manual
+          </span>
+        )}
+      </div>
+
       {/* Toolbar */}
       <div className="flex items-center justify-between px-4 py-2 border-b border-border bg-card">
         <div className="flex items-center gap-3">
           <div className="text-sm font-medium">
-            Preview - Form {activeTab}
+            Preview - Form {selectedTab}
           </div>
           {numPages > 0 && (
             <span className="text-xs text-muted-foreground">

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { FormDataProvider } from '@/context/FormDataContext'
 import { PDFFormattingProvider } from '@/context/PDFFormattingContext'
 import { Header } from '@/components/layout/Header'
@@ -6,23 +6,20 @@ import { Footer } from '@/components/layout/Footer'
 import { InputSection } from '@/components/InputSection'
 import { LeftPanel } from '@/components/LeftPanel'
 import { RightPanel } from '@/components/RightPanel'
-import { FormTab } from '@/components/TabBar'
+import { FormSection } from '@/components/ContinuousFormView'
 import { LandingPage } from '@/pages/LandingPage'
 
 // Key for storing landing page state in sessionStorage
 const SHOW_APP_KEY = 'medscheck_show_app'
 
 function MainApp() {
-  // State for active tab (1, 2, 3, or 4) - restore from localStorage or default to 1
-  const [activeTab, setActiveTab] = useState<FormTab>(() => {
-    const saved = localStorage.getItem('medscheck_active_tab')
-    return saved ? (parseInt(saved) as FormTab) : 1
-  })
+  // State for active form section (synced from scroll position)
+  const [activeSection, setActiveSection] = useState<FormSection>(1)
   
-  // Save active tab to localStorage whenever it changes
-  useEffect(() => {
-    localStorage.setItem('medscheck_active_tab', activeTab.toString())
-  }, [activeTab])
+  // Callback for when visible section changes (from scroll)
+  const handleVisibleSectionChange = useCallback((section: FormSection) => {
+    setActiveSection(section)
+  }, [])
   
   // State for input section collapse
   const [isInputCollapsed, setIsInputCollapsed] = useState(false)
@@ -144,7 +141,7 @@ function MainApp() {
           className="border-r border-border flex flex-col overflow-hidden"
           style={{ width: `${leftPanelWidth}%` }}
         >
-          <LeftPanel activeTab={activeTab} onTabChange={setActiveTab} />
+          <LeftPanel onVisibleSectionChange={handleVisibleSectionChange} />
           
           {/* Vertical Resize Handle - Above Clinical Notes */}
           <div
@@ -192,7 +189,7 @@ function MainApp() {
 
         {/* Right Panel - Remaining width, contains PDF preview */}
         <div className="flex-1 overflow-hidden">
-          <RightPanel activeTab={activeTab} />
+          <RightPanel activeSection={activeSection} />
         </div>
       </main>
 
