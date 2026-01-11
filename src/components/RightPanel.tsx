@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react'
-import { Download, Loader2, FileStack, ZoomIn, ZoomOut } from 'lucide-react'
+import { Download, Loader2, FileStack, ZoomIn, ZoomOut, BookOpen } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { FormSection } from './ContinuousFormView'
 import { pdf } from '@react-pdf/renderer'
@@ -12,6 +12,7 @@ import { Form3PDF } from './pdf/Form3PDF'
 import { Form4PDF } from './pdf/Form4PDF'
 import { Form5PDF } from './pdf/Form5PDF'
 import { Form6PDF } from './pdf/Form6PDF'
+import { ConsolidatedPDF } from './pdf/ConsolidatedPDF'
 import { useFormData } from '@/context/FormDataContext'
 
 // Configure PDF.js worker
@@ -120,6 +121,7 @@ export function RightPanel() {
   const { data } = useFormData()
   const [isDownloading, setIsDownloading] = useState(false)
   const [isDownloadingAll, setIsDownloadingAll] = useState(false)
+  const [isDownloadingConsolidated, setIsDownloadingConsolidated] = useState(false)
   const [manualRefresh, setManualRefresh] = useState(0)
   const [numPages, setNumPages] = useState<number>(0)
   const [scale, setScale] = useState(1.0)
@@ -213,6 +215,40 @@ export function RightPanel() {
       console.error('Consolidated PDF download failed:', error)
     } finally {
       setIsDownloadingAll(false)
+    }
+  }
+
+  const handleDownloadConsolidated = async () => {
+    console.log('Consolidated PDF download started')
+    setIsDownloadingConsolidated(true)
+    try {
+      const patientName = data.form1.patientName.replace(/\s+/g, '_') || 
+                         `${data.form2.patientLastName}_${data.form2.patientFirstName}`.replace(/\s+/g, '_') || 
+                         'Patient'
+      const date = data.form1.date || new Date().toISOString().split('T')[0]
+      
+      console.log('Creating ConsolidatedPDF component...')
+      const doc = <ConsolidatedPDF data={data} />
+      
+      console.log('Generating PDF blob...')
+      const blob = await pdf(doc).toBlob()
+      
+      console.log('PDF blob created, size:', blob.size)
+      const url = URL.createObjectURL(blob)
+      
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `MedsCheck_Consolidated_${patientName}_${date}.pdf`
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      URL.revokeObjectURL(url)
+      
+      console.log('Consolidated PDF download completed successfully')
+    } catch (error) {
+      console.error('Consolidated PDF download failed:', error)
+    } finally {
+      setIsDownloadingConsolidated(false)
     }
   }
 
@@ -422,7 +458,22 @@ export function RightPanel() {
             ) : (
               <FileStack className="h-4 w-4" />
             )}
-            <span className="hidden sm:inline">Download All</span>
+            <span className="hidden sm:inline">Download All Separate</span>
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleDownloadConsolidated}
+            disabled={isDownloadingConsolidated}
+            className="gap-2"
+            title="Download all forms in one PDF with bookmarks"
+          >
+            {isDownloadingConsolidated ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <BookOpen className="h-4 w-4" />
+            )}
+            <span className="hidden sm:inline">Download Consolidated PDF</span>
           </Button>
           <Button
             variant="default"
@@ -436,7 +487,7 @@ export function RightPanel() {
             ) : (
               <Download className="h-4 w-4" />
             )}
-            Download PDF
+            Download Current Form
           </Button>
         </div>
       </div>

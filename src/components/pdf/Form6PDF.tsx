@@ -179,11 +179,12 @@ interface Form6PDFProps {
   data: MedsCheckFormData
 }
 
-export function Form6PDF({ data }: Form6PDFProps) {
+// Export just the page content for consolidated PDF
+export function Form6Page({ data }: Form6PDFProps) {
   const form6 = data.form6
 
   return (
-    <Document>
+    <>
       {/* PAGE 1 - Patient Information and Initial Assessment */}
       <Page size="LETTER" style={styles.page}>
         {/* Header with logos */}
@@ -915,6 +916,15 @@ export function Form6PDF({ data }: Form6PDFProps) {
           <Text>Page 4 of 4</Text>
         </View>
       </Page>
+    </>
+  )
+}
+
+// Export full document for individual download
+export function Form6PDF({ data }: Form6PDFProps) {
+  return (
+    <Document>
+      <Form6Page data={data} />
     </Document>
   )
 }

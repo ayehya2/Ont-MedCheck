@@ -210,11 +210,12 @@ interface Form4PDFProps {
   data: MedsCheckFormData
 }
 
-export function Form4PDF({ data }: Form4PDFProps) {
+// Export just the page content for consolidated PDF
+export function Form4Page({ data }: Form4PDFProps) {
   const form4 = data.form4
 
   return (
-    <Document>
+    <>
       {/* PAGE 1 - Demographics and Interview Location */}
       <Page size="LETTER" style={styles.page}>
         {/* Header with logos */}
@@ -1204,6 +1205,15 @@ export function Form4PDF({ data }: Form4PDFProps) {
           </View>
         </View>
       </Page>
+    </>
+  )
+}
+
+// Export full document for individual download
+export function Form4PDF({ data }: Form4PDFProps) {
+  return (
+    <Document>
+      <Form4Page data={data} />
     </Document>
   )
 }

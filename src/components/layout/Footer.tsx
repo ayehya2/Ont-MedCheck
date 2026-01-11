@@ -1,4 +1,4 @@
-import { Save, Download, Trash2 } from 'lucide-react'
+import { Save, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useFormData } from '@/context/FormDataContext'
 
@@ -7,10 +7,6 @@ export function Footer() {
 
   const handleSave = () => {
     saveToStorage()
-  }
-
-  const handleDownloadAll = () => {
-    console.log('Download All PDFs clicked')
   }
 
   const handleClearAll = () => {
@@ -51,16 +47,6 @@ export function Footer() {
         >
           <Save className="h-4 w-4" />
           Save Draft
-        </Button>
-
-        <Button
-          variant="default"
-          size="sm"
-          onClick={handleDownloadAll}
-          className="gap-2"
-        >
-          <Download className="h-4 w-4" />
-          Download All PDFs
         </Button>
 
         <Button

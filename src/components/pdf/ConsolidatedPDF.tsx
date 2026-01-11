@@ -1,8 +1,13 @@
 import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer'
 import { MedsCheckFormData } from '@/types/forms'
 
-// Import individual form page components - we'll need to create these exports
-// For now, this is a placeholder that combines all forms
+// Import individual form page components
+import { Form1Page } from './Form1PDF'
+import { Form2Page } from './Form2PDF'
+import { Form3Page } from './Form3PDF'
+import { Form4Page } from './Form4PDF'
+import { Form5Page } from './Form5PDF'
+import { Form6Page } from './Form6PDF'
 
 interface ConsolidatedPDFProps {
   data: MedsCheckFormData
@@ -12,11 +17,11 @@ const styles = StyleSheet.create({
   coverPage: {
     padding: 40,
     fontSize: 12,
-    fontFamily: 'Helvetica',
+    fontFamily: 'Times-Roman',
   },
   coverTitle: {
     fontSize: 24,
-    fontFamily: 'Helvetica-Bold',
+    fontFamily: 'Times-Bold',
     textAlign: 'center',
     marginTop: 100,
     marginBottom: 30,
@@ -33,18 +38,17 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#666'
   },
-  sectionDivider: {
+  dividerPage: {
     padding: 40,
     fontSize: 18,
-    fontFamily: 'Helvetica-Bold',
+    fontFamily: 'Times-Bold',
     textAlign: 'center',
     backgroundColor: '#f5f5f5',
     paddingTop: 300
   }
 })
 
-// Note: @react-pdf/renderer doesn't support PDF bookmarks/outlines natively
-// This consolidated PDF includes all 6 forms with divider pages for easy navigation
+// Consolidated PDF includes all 6 forms with bookmarks for navigation
 export function ConsolidatedPDF({ data }: ConsolidatedPDFProps) {
   const patientName = data.form1.patientName || 
                      `${data.form2.patientFirstName} ${data.form2.patientLastName}`.trim() ||
@@ -60,7 +64,7 @@ export function ConsolidatedPDF({ data }: ConsolidatedPDFProps) {
       keywords="MedsCheck, Ontario, Pharmacy, Forms, All Forms"
     >
       {/* Cover Page */}
-      <Page size="LETTER" style={styles.coverPage}>
+      <Page size="LETTER" style={styles.coverPage} bookmark="Table of Contents">
         <Text style={styles.coverTitle}>Ontario MedsCheck</Text>
         <Text style={{...styles.coverTitle, fontSize: 20, marginTop: 10}}>
           Complete Documentation Package
@@ -71,38 +75,60 @@ export function ConsolidatedPDF({ data }: ConsolidatedPDFProps) {
           <Text style={styles.coverInfo}>Pharmacist: {data.form1.pharmacistName || data.pharmacy.pharmacistName || ''}</Text>
         </View>
         <View style={{marginTop: 50}}>
-          <Text style={{fontSize: 12, marginBottom: 5}}>Contents:</Text>
-          <Text style={{fontSize: 11, marginBottom: 3}}>• Form 1: Healthcare Provider Notification</Text>
-          <Text style={{fontSize: 11, marginBottom: 3}}>• Form 2: Patient Acknowledgement</Text>
+          <Text style={{fontSize: 12, marginBottom: 5, fontFamily: 'Times-Bold'}}>Contents:</Text>
+          <Text style={{fontSize: 11, marginBottom: 3}}>• Form 1: Healthcare Provider Notification of MedsCheck Services</Text>
+          <Text style={{fontSize: 11, marginBottom: 3}}>• Form 2: MedsCheck Patient Acknowledgement of Professional Pharmacy Service</Text>
           <Text style={{fontSize: 11, marginBottom: 3}}>• Form 3: Personal Medication Record</Text>
-          <Text style={{fontSize: 11, marginBottom: 3}}>• Form 4: Pharmacist Worksheet</Text>
-          <Text style={{fontSize: 11, marginBottom: 3}}>• Form 5: Diabetes Education Patient Take-Home Summary</Text>
-          <Text style={{fontSize: 11, marginBottom: 3}}>• Form 6: Patient Take-Home Summary</Text>
+          <Text style={{fontSize: 11, marginBottom: 3}}>• Form 4: MedsCheck Pharmacist Worksheet</Text>
+          <Text style={{fontSize: 11, marginBottom: 3}}>• Form 5: Patient Take-Home Summary</Text>
+          <Text style={{fontSize: 11, marginBottom: 3}}>• Form 6: Diabetes Education Checklist</Text>
         </View>
         <Text style={styles.coverDate}>
           Generated: {new Date().toLocaleString('en-CA')}
         </Text>
       </Page>
 
-      {/* IMPORTANT: The individual form pages need to be imported here */}
-      {/* Since each Form PDF component returns a <Document>, we cannot directly include them */}
-      {/* This is a limitation of @react-pdf/renderer - it doesn't support nested Documents */}
-      {/* or true PDF bookmarks */}
-      
-      {/* Workaround: Users download all forms separately with sequential naming */}
-      {/* This provides organization through file naming rather than PDF bookmarks */}
-      
-      <Page size="LETTER" style={styles.coverPage}>
-        <Text style={{fontSize: 16, textAlign: 'center', marginTop: 250}}>
-          Note: This consolidated PDF feature requires restructuring the form components.
-        </Text>
-        <Text style={{fontSize: 12, textAlign: 'center', marginTop: 20, color: '#666'}}>
-          Currently, please use "Download All" to get all 6 forms as separate PDFs.
-        </Text>
-        <Text style={{fontSize: 12, textAlign: 'center', marginTop: 10, color: '#666'}}>
-          They will be named sequentially for easy organization.
-        </Text>
+      {/* Form 1: Healthcare Provider Notification */}
+      <Page size="LETTER" style={styles.dividerPage} bookmark="Form 1: Healthcare Provider Notification">
+        <Text>Form 1</Text>
+        <Text style={{fontSize: 16, marginTop: 10}}>Healthcare Provider Notification of MedsCheck Services</Text>
       </Page>
+      <Form1Page data={data} />
+
+      {/* Form 2: Patient Acknowledgement */}
+      <Page size="LETTER" style={styles.dividerPage} bookmark="Form 2: Patient Acknowledgement">
+        <Text>Form 2</Text>
+        <Text style={{fontSize: 16, marginTop: 10}}>MedsCheck Patient Acknowledgement of Professional Pharmacy Service</Text>
+      </Page>
+      <Form2Page data={data} />
+
+      {/* Form 3: Personal Medication Record */}
+      <Page size="LETTER" style={styles.dividerPage} bookmark="Form 3: Personal Medication Record">
+        <Text>Form 3</Text>
+        <Text style={{fontSize: 16, marginTop: 10}}>Personal Medication Record</Text>
+      </Page>
+      <Form3Page data={data} />
+
+      {/* Form 4: Pharmacist Worksheet */}
+      <Page size="LETTER" style={styles.dividerPage} bookmark="Form 4: Pharmacist Worksheet">
+        <Text>Form 4</Text>
+        <Text style={{fontSize: 16, marginTop: 10}}>MedsCheck Pharmacist Worksheet</Text>
+      </Page>
+      <Form4Page data={data} />
+
+      {/* Form 5: Patient Take-Home Summary */}
+      <Page size="LETTER" style={styles.dividerPage} bookmark="Form 5: Patient Take-Home Summary">
+        <Text>Form 5</Text>
+        <Text style={{fontSize: 16, marginTop: 10}}>Patient Take-Home Summary</Text>
+      </Page>
+      <Form5Page data={data} />
+
+      {/* Form 6: Diabetes Education Checklist */}
+      <Page size="LETTER" style={styles.dividerPage} bookmark="Form 6: Diabetes Education Checklist">
+        <Text>Form 6</Text>
+        <Text style={{fontSize: 16, marginTop: 10}}>Diabetes Education Checklist</Text>
+      </Page>
+      <Form6Page data={data} />
     </Document>
   )
 }

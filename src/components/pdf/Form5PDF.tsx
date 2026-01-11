@@ -223,13 +223,13 @@ const styles = StyleSheet.create({
   }
 })
 
-export function Form5PDF({ data }: Form5PDFProps) {
+// Export just the page content for consolidated PDF
+export function Form5Page({ data }: Form5PDFProps) {
   const form5 = data.form5
 
   return (
-    <Document>
-      <Page size="LETTER" style={styles.page}>
-        {/* Header with logos */}
+    <Page size="LETTER" style={styles.page}>
+      {/* Header with logos */}
         <View style={styles.header}>
           <Image src='/ontario-logo.png' style={{ height: 28, width: 80, objectFit: 'contain' }} />
           <Text style={{ fontSize: 10, fontFamily: 'Helvetica-Bold' }}>Ministry of Health{'\n'}and Long-Term Care</Text>
@@ -463,7 +463,15 @@ export function Form5PDF({ data }: Form5PDFProps) {
           <Text>Disponible en français</Text>
           <Text>Page 1 of 1</Text>
         </View>
-      </Page>
+    </Page>
+  )
+}
+
+// Export full document for individual download
+export function Form5PDF({ data }: Form5PDFProps) {
+  return (
+    <Document>
+      <Form5Page data={data} />
     </Document>
   )
 }

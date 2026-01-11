@@ -256,13 +256,13 @@ interface Form3PDFProps {
   data: MedsCheckFormData
 }
 
-export function Form3PDF({ data }: Form3PDFProps) {
+// Export just the page content for consolidated PDF
+export function Form3Page({ data }: Form3PDFProps) {
   const form3 = data.form3
 
   return (
-    <Document>
-      <Page size="LETTER" orientation="landscape" style={styles.page}>
-        {/* Header */}
+    <Page size="LETTER" orientation="landscape" style={styles.page}>
+      {/* Header */}
         <View style={styles.header}>
           <Image src='/ontario-logo.png' style={styles.logo} />
           <Image src='/medscheck-logo.png' style={styles.medsCheckLogoImage} />
@@ -524,7 +524,15 @@ export function Form3PDF({ data }: Form3PDFProps) {
           <Text>Disponible en français</Text>
           <Text>Page 1 of 1</Text>
         </View>
-      </Page>
+    </Page>
+  )
+}
+
+// Export full document for individual download  
+export function Form3PDF({ data }: Form3PDFProps) {
+  return (
+    <Document>
+      <Form3Page data={data} />
     </Document>
   )
 }

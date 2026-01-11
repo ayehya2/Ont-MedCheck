@@ -229,13 +229,13 @@ interface Form2PDFProps {
   data: MedsCheckFormData
 }
 
-export function Form2PDF({ data }: Form2PDFProps) {
+// Export just the page content for consolidated PDF
+export function Form2Page({ data }: Form2PDFProps) {
   const form2 = data.form2
 
   return (
-    <Document>
-      <Page size="LETTER" style={styles.page}>
-        {/* Header */}
+    <Page size="LETTER" style={styles.page}>
+      {/* Header */}
         <View style={styles.header}>
           <Image src='/ontario-logo.png' style={styles.logo} />
           <Image src='/medscheck-logo.png' style={styles.medsCheckLogoImage} />
@@ -457,7 +457,15 @@ export function Form2PDF({ data }: Form2PDFProps) {
           <Text>4975-47E (2022/11)   © King's Printer for Ontario, 2022</Text>
           <Text>Disponible en français                    Page 1 of 1</Text>
         </View>
-      </Page>
+    </Page>
+  )
+}
+
+// Export full document for individual download
+export function Form2PDF({ data }: Form2PDFProps) {
+  return (
+    <Document>
+      <Form2Page data={data} />
     </Document>
   )
 }
