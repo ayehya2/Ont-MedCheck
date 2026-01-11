@@ -13,8 +13,16 @@ import { LandingPage } from '@/pages/LandingPage'
 const SHOW_APP_KEY = 'medscheck_show_app'
 
 function MainApp() {
-  // State for active tab (1, 2, 3, or 4)
-  const [activeTab, setActiveTab] = useState<FormTab>(1)
+  // State for active tab (1, 2, 3, or 4) - restore from localStorage or default to 1
+  const [activeTab, setActiveTab] = useState<FormTab>(() => {
+    const saved = localStorage.getItem('medscheck_active_tab')
+    return saved ? (parseInt(saved) as FormTab) : 1
+  })
+  
+  // Save active tab to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('medscheck_active_tab', activeTab.toString())
+  }, [activeTab])
   
   // State for input section collapse
   const [isInputCollapsed, setIsInputCollapsed] = useState(false)

@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
   sectionHeader: {
     backgroundColor: '#D0D8E8',
     padding: 3,
-    fontSize: 10,
+    fontSize: 8,
     fontFamily: 'Helvetica-Bold',
     marginTop: 2,
     marginBottom: 1
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
   },
   cellLabel: {
     fontSize: 7,
-    fontFamily: 'Helvetica-Bold',
+    fontFamily: 'Helvetica',
     backgroundColor: '#F0F0F0',
     padding: 2,
     borderBottomWidth: 0.5,
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
   },
   allergiesLabel: {
     fontSize: 7,
-    fontFamily: 'Helvetica-Bold',
+    fontFamily: 'Helvetica',
     backgroundColor: '#F0F0F0',
     padding: 2,
     borderBottomWidth: 0.5,
@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   medicationHeaderSubtext: {
-    fontSize: 6,
+    fontSize: 7,
     textAlign: 'center',
     marginTop: 1
   },
@@ -472,38 +472,48 @@ export function Form3PDF({ data }: Form3PDFProps) {
         {/* Pharmacy Section */}
         <View style={styles.pharmacySection}>
           <View style={styles.pharmacyRow}>
-            <View style={{ ...styles.pharmacyCell, flex: 2 }}>
+            {/* Left side - 25% - Pharmacy Name spanning full height */}
+            <View style={{ ...styles.pharmacyCell, width: '25%' }}>
               <Text style={styles.cellLabel}>Pharmacy Name (and/or Logo/Label) and Address</Text>
-              <Text style={{ ...styles.cellValue, minHeight: 24 }}>{form3.pharmacyNameAddress}</Text>
+              <Text style={{ ...styles.cellValue, minHeight: 48 }}>{form3.pharmacyNameAddress}</Text>
             </View>
-            <View style={{ flex: 1 }}>
-              <Text style={styles.cellLabel}>Pharmacy Telephone Number</Text>
-              <Text style={styles.cellValue}>{form3.pharmacyPhone}</Text>
-            </View>
-          </View>
-          <View style={styles.pharmacyRowLast}>
-            <View style={{ ...styles.pharmacyCell, flex: 1 }}>
-              <Text style={styles.cellLabel}>MedsCheck Pharmacist Name</Text>
-              <Text style={styles.cellValue}>{form3.pharmacistName}</Text>
-            </View>
-            <View style={{ ...styles.pharmacyCell, flex: 1 }}>
-              <Text style={styles.cellLabel}>Pharmacist's Signature</Text>
-              {form3.pharmacistSignature && form3.pharmacistSignature.startsWith('data:image') ? (
-                <Image 
-                  src={form3.pharmacistSignature} 
-                  style={{ height: 25, objectFit: 'contain', marginTop: 2 }}
-                />
-              ) : (
-                <Text style={{ ...styles.cellValue, fontStyle: 'italic' }}>{form3.pharmacistSignature}</Text>
-              )}
-            </View>
-            <View style={{ ...styles.pharmacyCell, flex: 1 }}>
-              <Text style={styles.cellLabel}>Date MedsCheck Report Completed (yyyy/mm/dd)</Text>
-              <Text style={styles.cellValue}>{formatDate(form3.dateCompleted)}</Text>
-            </View>
-            <View style={{ flex: 1 }}>
-              <Text style={styles.cellLabel}>Pharmacy Fax Number</Text>
-              <Text style={styles.cellValue}>{form3.pharmacyFax}</Text>
+            
+            {/* Right side - 75% - Two rows */}
+            <View style={{ width: '75%' }}>
+              {/* Row 1: MedsCheck Pharmacist Name | Pharmacy Telephone Number */}
+              <View style={{ flexDirection: 'row', borderBottomWidth: 0.5, borderBottomColor: '#999' }}>
+                <View style={{ ...styles.pharmacyCell, width: '50%' }}>
+                  <Text style={styles.cellLabel}>MedsCheck Pharmacist Name</Text>
+                  <Text style={{ ...styles.cellValue, minHeight: 22 }}>{form3.pharmacistName}</Text>
+                </View>
+                <View style={{ width: '50%' }}>
+                  <Text style={styles.cellLabel}>Pharmacy Telephone Number</Text>
+                  <Text style={{ ...styles.cellValue, minHeight: 22 }}>{form3.pharmacyPhone}</Text>
+                </View>
+              </View>
+              
+              {/* Row 2: Pharmacist's Signature | Date | Pharmacy Fax Number */}
+              <View style={{ flexDirection: 'row' }}>
+                <View style={{ ...styles.pharmacyCell, width: '33.33%' }}>
+                  <Text style={styles.cellLabel}>Pharmacist's Signature</Text>
+                  {form3.pharmacistSignature && form3.pharmacistSignature.startsWith('data:image') ? (
+                    <Image 
+                      src={form3.pharmacistSignature} 
+                      style={{ height: 20, objectFit: 'contain', marginTop: 2 }}
+                    />
+                  ) : (
+                    <Text style={{ ...styles.cellValue, fontStyle: 'italic' }}>{form3.pharmacistSignature}</Text>
+                  )}
+                </View>
+                <View style={{ ...styles.pharmacyCell, width: '33.33%' }}>
+                  <Text style={styles.cellLabel}>Date MedsCheck Report Completed (yyyy/mm/dd)</Text>
+                  <Text style={styles.cellValue}>{formatDate(form3.dateCompleted)}</Text>
+                </View>
+                <View style={{ width: '33.34%' }}>
+                  <Text style={styles.cellLabel}>Pharmacy Fax Number</Text>
+                  <Text style={styles.cellValue}>{form3.pharmacyFax}</Text>
+                </View>
+              </View>
             </View>
           </View>
         </View>

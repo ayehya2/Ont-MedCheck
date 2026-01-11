@@ -65,17 +65,19 @@ const styles = StyleSheet.create({
     fontSize: 11,
     backgroundColor: '#E8EEF7',
     padding: 4,
-    height: 20,
-    minHeight: 20
+    minHeight: 16
   },
   valueHalf: {
     flex: 1,
     fontSize: 11,
     backgroundColor: '#E8EEF7',
     padding: 4,
-    height: 20,
-    minHeight: 20,
+    minHeight: 16,
     marginRight: 10
+  },
+  valueText: {
+    fontSize: 11,
+    color: '#000000'
   },
   paragraph: {
     fontSize: 11,
@@ -196,72 +198,54 @@ export function Form1Page({ data }: Form1PDFProps) {
 
         {/* Recipient Info Row 1: To and Fax */}
         <View style={styles.row}>
-          <View style={{ flexDirection: 'row', flex: 1 }}>
+          <View style={{ flexDirection: 'row', flex: 1, alignItems: 'center' }}>
             <Text style={styles.labelSmall}>To</Text>
-            <View style={styles.valueHalf}>
-              <Text>{form1.to || ''}</Text>
-            </View>
+            <Text style={styles.valueHalf}>{form1.to || ''}</Text>
           </View>
-          <View style={{ flexDirection: 'row', flex: 1 }}>
+          <View style={{ flexDirection: 'row', flex: 1, alignItems: 'center' }}>
             <Text style={styles.labelSmall}>Fax Number</Text>
-            <View style={styles.value}>
-              <Text>{form1.faxNumber || ''}</Text>
-            </View>
+            <Text style={styles.value}>{form1.faxNumber || ''}</Text>
           </View>
         </View>
 
         {/* Row 2: Telephone and Pages */}
         <View style={styles.row}>
-          <View style={{ flexDirection: 'row', flex: 1 }}>
+          <View style={{ flexDirection: 'row', flex: 1, alignItems: 'center' }}>
             <Text style={{ ...styles.labelSmall, width: 125 }}>Telephone Number</Text>
-            <View style={styles.valueHalf}>
-              <Text>{form1.telephoneNumber || ''}</Text>
-            </View>
+            <Text style={styles.valueHalf}>{form1.telephoneNumber || ''}</Text>
           </View>
-          <View style={{ flexDirection: 'row', flex: 1 }}>
+          <View style={{ flexDirection: 'row', flex: 1, alignItems: 'center' }}>
             <Text style={styles.labelSmall}>Pages</Text>
-            <View style={styles.value}>
-              <Text>{form1.pages || ''}</Text>
-            </View>
+            <Text style={styles.value}>{form1.pages || ''}</Text>
           </View>
         </View>
 
         {/* Row 3: Email and Date */}
         <View style={styles.row}>
-          <View style={{ flexDirection: 'row', flex: 1 }}>
+          <View style={{ flexDirection: 'row', flex: 1, alignItems: 'center' }}>
             <Text style={styles.labelSmall}>Email Address</Text>
-            <View style={styles.valueHalf}>
-              <Text>{form1.emailAddress || ''}</Text>
-            </View>
+            <Text style={styles.valueHalf}>{form1.emailAddress || ''}</Text>
           </View>
-          <View style={{ flexDirection: 'row', flex: 1 }}>
+          <View style={{ flexDirection: 'row', flex: 1, alignItems: 'center' }}>
             <Text style={{ ...styles.labelSmall, width: 125 }}>Date (yyyy/mm/dd)</Text>
-            <View style={styles.value}>
-              <Text>{formatDate(form1.date) || ''}</Text>
-            </View>
+            <Text style={styles.value}>{formatDate(form1.date) || ''}</Text>
           </View>
         </View>
 
         {/* Patient Information */}
         <View style={styles.fieldGroup}>
           <Text style={styles.label}>Patient's Name</Text>
-          <View style={styles.value}>
-            <Text>{form1.patientName || ''}</Text>
-          </View>
+          <Text style={styles.value}>{form1.patientName || ''}</Text>
         </View>
 
         <View style={styles.fieldGroup}>
           <Text style={{ ...styles.labelSmall, width: 115 }}>Patient's Address</Text>
-          <View style={styles.value}>
-            <Text>{form1.patientAddress || ''}</Text>
-          </View>
+          <Text style={styles.value}>{form1.patientAddress || ''}</Text>
         </View>
 
         <View style={styles.fieldGroup}>
           <Text style={{ ...styles.labelSmall, width: 125 }}>Telephone Number</Text>
-          <View style={styles.value}>
-            <Text>{form1.patientPhone || ''}</Text>
-          </View>
+          <Text style={styles.value}>{form1.patientPhone || ''}</Text>
         </View>
 
         {/* MedsCheck paragraph */}

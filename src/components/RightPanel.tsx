@@ -18,6 +18,7 @@ function usePDFPreview(activeTab: FormTab, data: ReturnType<typeof useFormData>[
   const [pdfUrl, setPdfUrl] = useState<string | null>(null)
   const [isGenerating, setIsGenerating] = useState(false)
   const previousUrlRef = useRef<string | null>(null)
+  const scrollPositionRef = useRef<number>(0)
 
   // Memoize the document based on active tab and data
   const doc = useMemo(() => {
@@ -96,7 +97,7 @@ function usePDFPreview(activeTab: FormTab, data: ReturnType<typeof useFormData>[
     }
   }, [])
 
-  return { pdfUrl, isGenerating }
+  return { pdfUrl, isGenerating, scrollPositionRef }
 }
 
 export function RightPanel({ activeTab }: RightPanelProps) {
@@ -104,7 +105,55 @@ export function RightPanel({ activeTab }: RightPanelProps) {
   const [isDownloading, setIsDownloading] = useState(false)
   const [isDownloadingAll, setIsDownloadingAll] = useState(false)
   const [manualRefresh, setManualRefresh] = useState(0)
-  const { pdfUrl, isGenerating } = usePDFPreview(activeTab, data, manualRefresh)
+  const [currentPage, setCurrentPage] = useState(1)
+  const iframeRef = useRef<HTMLIFrameElement>(null)
+  const scrollContainerRef = useRef<HTMLDivElement>(null)
+  const { pdfUrl, isGenerating, scrollPositionRef } = usePDFPreview(activeTab, data, manualRefresh)
+  
+  // Reset page to 1 when switching tabs
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [activeTab])
+  
+  // Save scroll position to localStorage periodically
+  useEffect(() => {
+    const container = scrollContainerRef.current
+    if (!container) return
+    
+    const saveScrollPosition = () => {
+      const scrollTop = container.scrollTop
+      scrollPositionRef.current = scrollTop
+      localStorage.setItem(`pdf_scroll_form${activeTab}`, scrollTop.toString())
+    }
+    
+    // Throttled scroll handler
+    let scrollTimeout: ReturnType<typeof setTimeout>
+    const handleScroll = () => {
+      clearTimeout(scrollTimeout)
+      scrollTimeout = setTimeout(saveScrollPosition, 100)
+    }
+    
+    container.addEventListener('scroll', handleScroll)
+    return () => {
+      container.removeEventListener('scroll', handleScroll)
+      clearTimeout(scrollTimeout)
+    }
+  }, [activeTab, scrollPositionRef])
+  
+  // Restore scroll position when PDF URL changes
+  useEffect(() => {
+    if (!pdfUrl || !scrollContainerRef.current) return
+    
+    const container = scrollContainerRef.current
+    const savedScroll = localStorage.getItem(`pdf_scroll_form${activeTab}`)
+    
+    if (savedScroll) {
+      // Wait for iframe to load
+      setTimeout(() => {
+        container.scrollTop = parseInt(savedScroll, 10)
+      }, 150)
+    }
+  }, [pdfUrl, activeTab])
 
   const handleDownloadAll = async () => {
     setIsDownloadingAll(true)
@@ -215,14 +264,24 @@ export function RightPanel({ activeTab }: RightPanelProps) {
       )
     }
 
-    // Show PDF in iframe
+    // Show PDF in iframe/object
     if (pdfUrl) {
       return (
-        <iframe
-          src={`${pdfUrl}#toolbar=0&navpanes=0`}
-          style={{ width: '100%', height: '100%', border: 'none' }}
-          title={`Form ${activeTab} PDF Preview`}
-        />
+        <div style={{ width: '100%', height: '100%', position: 'relative' }}>
+          <object
+            data={`${pdfUrl}#toolbar=0&navpanes=0&scrollbar=1&page=${currentPage}&zoom=page-width`}
+            type="application/pdf"
+            style={{ width: '100%', height: '100%', border: 'none' }}
+            title={`Form ${activeTab} PDF Preview`}
+          >
+            <iframe
+              ref={iframeRef}
+              src={`${pdfUrl}#toolbar=0&navpanes=0&scrollbar=1&page=${currentPage}&zoom=page-width`}
+              style={{ width: '100%', height: '100%', border: 'none' }}
+              title={`Form ${activeTab} PDF Preview`}
+            />
+          </object>
+        </div>
       )
     }
 
@@ -237,12 +296,39 @@ export function RightPanel({ activeTab }: RightPanelProps) {
           <div className="text-sm font-medium">
             Preview - Form {activeTab}
           </div>
+          {pdfUrl && (
+            <div className="flex items-center gap-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                disabled={currentPage === 1}
+                className="h-7 w-7 p-0"
+                title="Previous page"
+              >
+                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+              </Button>
+              <span className="text-xs text-muted-foreground">Page {currentPage}</span>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setCurrentPage(prev => prev + 1)}
+                className="h-7 w-7 p-0"
+                title="Next page"
+              >
+                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </Button>
+            </div>
+          )}
           <div className="text-xs text-muted-foreground flex items-center gap-1">
             <span>•</span>
             <span>Ctrl + Scroll to zoom</span>
           </div>
         </div>
-
         <div className="flex items-center gap-2">
           <Button
             variant="ghost"
