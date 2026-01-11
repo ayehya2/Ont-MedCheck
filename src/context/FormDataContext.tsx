@@ -271,6 +271,8 @@ export function FormDataProvider({ children }: { children: React.ReactNode }) {
       updates.push({ path: 'form2.patientLastName', value: lastName })
       updates.push({ path: 'form3.patientFirstName', value: firstName })
       updates.push({ path: 'form3.patientLastName', value: lastName })
+      updates.push({ path: 'form4.patientFirstName', value: firstName })
+      updates.push({ path: 'form4.patientLastName', value: lastName })
     }
     
     // Patient phone syncing
@@ -433,6 +435,34 @@ export function FormDataProvider({ children }: { children: React.ReactNode }) {
     }
     if (path === 'form3.providerFax' && typeof value === 'string') {
       updates.push({ path: 'primaryCareProvider.fax', value })
+    }
+    
+    // Form 6 patient name syncing
+    if (path === 'form6.firstName' || path === 'form6.lastName') {
+      const currentData = state.data
+      const firstName = path === 'form6.firstName' ? value as string : currentData.form6.firstName
+      const lastName = path === 'form6.lastName' ? value as string : currentData.form6.lastName
+      
+      updates.push({ path: 'patient.firstName', value: firstName })
+      updates.push({ path: 'patient.lastName', value: lastName })
+    }
+    
+    // Form 6 provider syncing
+    if (path === 'form6.providerFirstName' || path === 'form6.providerLastName') {
+      const currentData = state.data
+      const firstName = path === 'form6.providerFirstName' ? value as string : currentData.form6.providerFirstName
+      const lastName = path === 'form6.providerLastName' ? value as string : currentData.form6.providerLastName
+      const fullName = `${firstName} ${lastName}`.trim()
+      updates.push({ path: 'primaryCareProvider.name', value: fullName })
+    }
+    if (path === 'form6.providerPhone' && typeof value === 'string') {
+      updates.push({ path: 'primaryCareProvider.phone', value })
+    }
+    if (path === 'form6.providerFax' && typeof value === 'string') {
+      updates.push({ path: 'primaryCareProvider.fax', value })
+    }
+    if (path === 'form6.providerEmail' && typeof value === 'string') {
+      updates.push({ path: 'primaryCareProvider.address', value })
     }
     
     return updates

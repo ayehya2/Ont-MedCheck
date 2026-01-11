@@ -10,20 +10,20 @@ import { Form1PDF } from './pdf/Form1PDF'
 import { Form2PDF } from './pdf/Form2PDF'
 import { Form3PDF } from './pdf/Form3PDF'
 import { Form4PDF } from './pdf/Form4PDF'
+import { Form5PDF } from './pdf/Form5PDF'
+import { Form6PDF } from './pdf/Form6PDF'
 import { useFormData } from '@/context/FormDataContext'
 
 // Configure PDF.js worker
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`
-
-interface RightPanelProps {
-  activeSection: FormSection
-}
 
 const formTabs = [
   { id: 1 as FormSection, label: 'Form 1' },
   { id: 2 as FormSection, label: 'Form 2' },
   { id: 3 as FormSection, label: 'Form 3' },
   { id: 4 as FormSection, label: 'Form 4' },
+  { id: 5 as FormSection, label: 'Form 5' },
+  { id: 6 as FormSection, label: 'Form 6' },
 ]
 
 // Custom hook to generate PDF blob URL with debounce
@@ -43,6 +43,10 @@ function usePDFPreview(activeTab: FormSection, data: ReturnType<typeof useFormDa
         return <Form3PDF data={data} />
       case 4:
         return <Form4PDF data={data} />
+      case 5:
+        return <Form5PDF data={data} />
+      case 6:
+        return <Form6PDF data={data} />
       default:
         return null
     }
@@ -112,35 +116,22 @@ function usePDFPreview(activeTab: FormSection, data: ReturnType<typeof useFormDa
   return { pdfUrl, isGenerating }
 }
 
-export function RightPanel({ activeSection }: RightPanelProps) {
+export function RightPanel() {
   const { data } = useFormData()
   const [isDownloading, setIsDownloading] = useState(false)
   const [isDownloadingAll, setIsDownloadingAll] = useState(false)
   const [manualRefresh, setManualRefresh] = useState(0)
   const [numPages, setNumPages] = useState<number>(0)
   const [scale, setScale] = useState(1.0)
-  const [selectedTab, setSelectedTab] = useState<FormSection>(activeSection)
+  const [selectedTab, setSelectedTab] = useState<FormSection>(1)
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const scrollPositionRef = useRef<number>(0)
   const isRestoringScrollRef = useRef(false)
   const { pdfUrl, isGenerating } = usePDFPreview(selectedTab, data, manualRefresh)
   
-  // Auto-sync tab with scroll position (can be overridden by manual tab click)
-  const [isAutoSync, setIsAutoSync] = useState(true)
-  
-  // Update selected tab when activeSection changes (from scroll)
-  useEffect(() => {
-    if (isAutoSync) {
-      setSelectedTab(activeSection)
-    }
-  }, [activeSection, isAutoSync])
-  
   // Manual tab selection
   const handleTabClick = (tabId: FormSection) => {
     setSelectedTab(tabId)
-    setIsAutoSync(false)
-    // Re-enable auto-sync after 3 seconds of no manual interaction
-    setTimeout(() => setIsAutoSync(true), 3000)
   }
   
   // Save scroll position before PDF regenerates
@@ -198,7 +189,9 @@ export function RightPanel({ activeSection }: RightPanelProps) {
         { doc: <Form1PDF data={data} />, name: '1_Healthcare_Provider_Notification' },
         { doc: <Form2PDF data={data} />, name: '2_Patient_Acknowledgement' },
         { doc: <Form3PDF data={data} />, name: '3_Personal_Medication_Record' },
-        { doc: <Form4PDF data={data} />, name: '4_Pharmacist_Worksheet' }
+        { doc: <Form4PDF data={data} />, name: '4_Pharmacist_Worksheet' },
+        { doc: <Form5PDF data={data} />, name: '5_Diabetes_Education_Patient_Summary' },
+        { doc: <Form6PDF data={data} />, name: '6_Diabetes_Education_Checklist' }
       ]
 
       const baseFilename = `MedsCheck_AllForms_${patientName}_${date}`
@@ -253,6 +246,18 @@ export function RightPanel({ activeSection }: RightPanelProps) {
           const patientName4 = `${data.form4.patientLastName}_${data.form4.patientFirstName}`.replace(/\s+/g, '_') || 'Patient'
           const date4 = data.form4.medsCheckReviewDate || new Date().toISOString().split('T')[0]
           filename = `Form4_PharmacistWorksheet_${patientName4}_${date4}.pdf`
+          break
+        case 5:
+          doc = <Form5PDF data={data} />
+          const patientName5 = `${data.form5.patientLastName}_${data.form5.patientFirstName}`.replace(/\s+/g, '_') || 'Patient'
+          const date5 = data.form5.diabetesEducationDate || new Date().toISOString().split('T')[0]
+          filename = `Form5_DiabetesEducationSummary_${patientName5}_${date5}.pdf`
+          break
+        case 6:
+          doc = <Form6PDF data={data} />
+          const patientName6 = `${data.form6.lastName}_${data.form6.firstName}`.replace(/\s+/g, '_') || 'Patient'
+          const date6 = data.form6.dateOfDiabetesEducation || new Date().toISOString().split('T')[0]
+          filename = `Form6_DiabetesEducationChecklist_${patientName6}_${date6}.pdf`
           break
         default:
           setIsDownloading(false)
@@ -347,11 +352,6 @@ export function RightPanel({ activeSection }: RightPanelProps) {
             {tab.label}
           </button>
         ))}
-        {!isAutoSync && (
-          <span className="ml-2 text-xs text-muted-foreground px-2 py-0.5 bg-muted rounded">
-            Manual
-          </span>
-        )}
       </div>
 
       {/* Toolbar */}
@@ -415,7 +415,7 @@ export function RightPanel({ activeSection }: RightPanelProps) {
             onClick={handleDownloadAll}
             disabled={isDownloadingAll}
             className="gap-2"
-            title="Download all 4 forms as separate PDFs"
+            title="Download all 6 forms as separate PDFs"
           >
             {isDownloadingAll ? (
               <Loader2 className="h-4 w-4 animate-spin" />

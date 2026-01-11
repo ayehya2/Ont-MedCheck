@@ -110,6 +110,7 @@ const styles = StyleSheet.create({
   },
   cellValue: {
     fontSize: 10,
+    color: '#00008B',
     padding: 2,
     backgroundColor: '#E8EEF7',
     minHeight: 12

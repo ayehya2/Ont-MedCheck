@@ -436,13 +436,13 @@ export function InputSection({ isCollapsed, onToggleCollapse, height = 600 }: In
       className="border-t bg-muted/30 overflow-hidden flex flex-col"
       style={{ 
         height: isCollapsed ? '40px' : `${height}px`,
-        transition: isCollapsed ? 'height 0.3s ease-in-out' : 'none'
+        transition: 'height 0.3s ease-in-out'
       }}
     >
       {/* Header / Title Bar - Always visible */}
       <button
         onClick={onToggleCollapse}
-        className="w-full h-10 px-4 flex items-center justify-between hover:bg-accent/30 transition-colors group border-b border-border"
+        className="w-full h-10 px-4 flex items-center justify-between hover:bg-accent/30 transition-colors group border-b border-border flex-shrink-0"
       >
         <span className="text-sm font-semibold text-foreground flex items-center gap-2">
           <Sparkles className="h-4 w-4 text-primary group-hover:scale-110 transition-transform" />
@@ -461,7 +461,8 @@ export function InputSection({ isCollapsed, onToggleCollapse, height = 600 }: In
       </button>
 
       {/* Expandable Content */}
-      <div className="px-4 pb-4 pt-3 flex-1 flex flex-col overflow-auto min-h-0">
+      {!isCollapsed && (
+        <div className="px-4 pb-4 pt-3 flex-1 flex flex-col overflow-auto min-h-0">
         {/* OCR Upload Section */}
         <div className="mb-3 flex-shrink-0">
           <OCRUpload 
@@ -496,12 +497,13 @@ Allergies: Penicillin, Sulfa"
           />
         </div>
 
-        <div className="flex items-center gap-2 flex-wrap flex-shrink-0">
+        <div className="flex items-center gap-2 flex-shrink-0 mt-auto">
           <Button
             onClick={toggleSpeechRecognition}
             variant={isListening ? "destructive" : "outline"}
-            className="gap-2"
+            className="gap-2 flex-shrink-0"
             disabled={isProcessing}
+            size="sm"
           >
             {isListening ? (
               <>
@@ -519,8 +521,9 @@ Allergies: Penicillin, Sulfa"
           <Button
             onClick={handleProcess}
             disabled={!notes.trim() || isProcessing}
-            className="gap-2 shadow-sm"
+            className="gap-2 shadow-sm flex-shrink-0"
             variant={useAI && apiKeyAvailable ? "default" : "secondary"}
+            size="sm"
           >
             {isProcessing ? (
               <>
@@ -577,7 +580,8 @@ Allergies: Penicillin, Sulfa"
             }
           </span>
         </div>
-      </div>
+        </div>
+      )}
     </div>
   )
 }

@@ -1,11 +1,7 @@
-import { ContinuousFormView, FormSection } from './ContinuousFormView'
+import { ContinuousFormView } from './ContinuousFormView'
 
-interface LeftPanelProps {
-  onVisibleSectionChange: (section: FormSection) => void
-}
-
-export function LeftPanel({ onVisibleSectionChange }: LeftPanelProps) {
+export function LeftPanel() {
   return (
-    <ContinuousFormView onVisibleSectionChange={onVisibleSectionChange} />
+    <ContinuousFormView />
   )
 }

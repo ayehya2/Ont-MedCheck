@@ -475,6 +475,288 @@ export interface Form4Data {
   documentationCompletedDate: string
 }
 
+// Form 5 sub-interfaces for dynamic sections
+export interface Form5Discussion {
+  id: string
+  content: string
+}
+
+export interface Form5Goal {
+  id: string
+  content: string
+}
+
+export interface Form5Action {
+  id: string
+  content: string
+}
+
+export interface Form5Resource {
+  id: string
+  content: string
+}
+
+export interface Form5Referral {
+  id: string
+  content: string
+}
+
+export interface Form5Data {
+  // Patient Information
+  patientLastName: string
+  patientFirstName: string
+  patientDOB: string // yyyy/mm/dd
+  patientPhone: string
+  pharmacyName: string
+  
+  // Pharmacy Address
+  pharmacyUnitNumber: string
+  pharmacyStreetNumber: string
+  pharmacyStreetName: string
+  pharmacyPOBox: string
+  pharmacyCity: string
+  pharmacyProvince: string
+  pharmacyPostalCode: string
+  pharmacyPhone: string
+  pharmacyFax: string
+  pharmacyEmail: string
+  
+  // Dynamic Sections (arrays)
+  discussions: Form5Discussion[] // Summary of Today's Discussion
+  goals: Form5Goal[] // My Goals
+  actions: Form5Action[] // What I Will Do To Get There
+  resources: Form5Resource[] // List of Resources and Contacts
+  referrals: Form5Referral[] // Referrals Information
+  
+  // Prepared By
+  pharmacistFullName: string // Last Name, First Name
+  diabetesEducationDate: string // yyyy/mm/dd
+  patientSignature: string
+  pharmacistSignature: string
+}
+
+// Form 6 - Diabetes Education Checklist (4969-47E)
+export interface Form6Data {
+  // Patient Information
+  lastName: string
+  firstName: string
+  gender: string
+  dateOfBirth: string // yyyy/mm/dd
+  healthCardNumber: string
+  telephoneNumber: string
+  datePatientSignedAcknowledgement: string // yyyy/mm/dd
+  
+  // Caregiver/Patient's Agent Information
+  caregiverLastName: string
+  caregiverFirstName: string
+  caregiverPhone: string
+  caregiverEmail: string
+  
+  // Primary Care Provider
+  providerLastName: string
+  providerFirstName: string
+  providerPhone: string
+  providerFax: string
+  providerEmail: string
+  
+  // General Information
+  stageOfReadiness: string
+  identifyPatientsGoals: string
+  myGoals: string // to be added to Patient Take-Home Summary
+  
+  // Medication Assessment
+  insulinUse: boolean | null
+  oralHypoglycemic: boolean | null
+  pharmacistComments: string
+  
+  // Lab Values
+  hba1c: boolean
+  hba1cValue: string
+  bp: boolean
+  bpValue: string
+  fpg: boolean
+  fpgValue: string
+  tc: boolean
+  hdlRatio: string
+  ldl: string
+  hdl: string
+  tg: string
+  
+  // Health Measurements (Page 2)
+  physicalActivity: boolean
+  physicalActivityMinPerWeek: string
+  weight: boolean
+  weightValue: string
+  height: string
+  waistCircumference: string
+  bmi: string
+  cognitiveFunction: boolean
+  cognitiveFunctionNotes: string
+  medsCheckAnnualAvailable: boolean
+  medsCheckAnnualNotes: string
+  dtpIdentified: boolean
+  dtpNotes: string
+  tobacco: boolean
+  tobaccoYes: boolean
+  tobaccoNo: boolean
+  tobaccoCigPerDay: string
+  smokingCessation: boolean
+  smokingCessationNotes: string
+  alcoholDrugs: boolean
+  alcoholDrugsType: string
+  alcoholDrugsFrequency: string
+  dietaryConcerns: boolean
+  dietaryConcernsNotes: string
+  otherHealth: boolean
+  otherHealthNotes: string
+  
+  // General Diabetes Education - Lifestyle
+  managementOfMedications: boolean
+  managementOfMedicationsNotes: string
+  footCareDiscussion: boolean
+  footCareNotes: string
+  screeningForDN: boolean
+  screeningForDNNotes: string
+  footConditionUlcers: boolean
+  footConditionNotes: string
+  properShoeFit: boolean
+  properShoeFitNotes: string
+  bpMonitoring: boolean
+  bpMonitoringNotes: string
+  cvRiskFactors: boolean
+  cvRiskFactorsNotes: string
+  mentalHealthAssessment: boolean
+  mentalHealthNotes: string
+  erectileDysfunction: boolean
+  erectileDysfunctionNotes: string
+  lifestyle: boolean
+  lifestyleDiet: boolean
+  lifestyleDietNotes: string
+  lifestyleStressReduction: boolean
+  lifestyleStressReductionNotes: string
+  lifestyleExercise: boolean
+  lifestyleExerciseNotes: string
+  eyeHealth: boolean
+  eyeHealthNotes: string
+  dentalHygiene: boolean
+  dentalHygieneNotes: string
+  immunizations: boolean
+  immunizationsInfluenza: boolean
+  immunizationsInfluenzaNotes: string
+  immunizationsPneumococcal: boolean
+  immunizationsPneumococcalNotes: string
+  immunizationsOther: boolean
+  immunizationsOtherNotes: string
+  drivingGuidelines: boolean
+  drivingGuidelinesNotes: string
+  travellingWithDiabetes: boolean
+  travellingWithDiabetesNotes: string
+  
+  // Self-Monitoring of Blood Glucose (Page 3)
+  meterTraining: boolean
+  meterTrainingNotes: string
+  testingFrequency: boolean
+  testingFrequencyNotes: string
+  recordingResults: boolean
+  recordingResultsNotes: string
+  identificationPatterns: boolean
+  identificationPatternsNotes: string
+  preventionHypoglycemia: boolean
+  preventionHypoglycemiaNotes: string
+  properMedicationHandling: boolean
+  properMedicationHandlingNotes: string
+  trainingDisposal: boolean
+  trainingDisposalNotes: string
+  sickDaysManagement: boolean
+  sickDaysManagementNotes: string
+  individualizedBGTargets: boolean
+  individualizedBGTargetsNotes: string
+  otherBloodGlucose: boolean
+  otherBloodGlucoseNotes: string
+  
+  // Specialty Training
+  insulinTypes: boolean
+  insulinTypesNotes: string
+  penSyringeHandling: boolean
+  penSyringeHandlingNotes: string
+  sitePreparation: boolean
+  sitePreparationNotes: string
+  injectionTrainingGLP1: boolean
+  injectionTrainingGLP1Notes: string
+  properInjectionTechnique: boolean
+  properInjectionTechniqueNotes: string
+  patientDemonstratedUse: boolean
+  patientDemonstratedUseNotes: string
+  dosageAdjustments: boolean
+  dosageAdjustmentsNotes: string
+  missedDoses: boolean
+  missedDosesNotes: string
+  reviewCarbohydrate: boolean
+  reviewCarbohydrateNotes: string
+  emergencySickDay: boolean
+  emergencySickDayNotes: string
+  alcoholTobaccoInsulin: boolean
+  alcoholTobaccoInsulinNotes: string
+  updatedInsulinRegimen: boolean
+  insulinType1: string
+  insulinType1Am: string
+  insulinType1Noon: string
+  insulinType1Supper: string
+  insulinType2: string
+  insulinType2HS: string
+  insulinType2Other: string
+  otherSpecialty: boolean
+  otherSpecialtyNotes: string
+  otherComplications: boolean
+  otherComplicationsNotes: string
+  
+  // Resources Provided
+  diabetesPassport: boolean
+  diabetesPassportNotes: string
+  sickDaysManagementPlan: boolean
+  sickDaysManagementPlanNotes: string
+  afterHoursSupport: boolean
+  afterHoursSupportNotes: string
+  directoryResources: boolean
+  directoryResourcesNotes: string
+  otherMaterialGiven: boolean
+  otherMaterialGivenNotes: string
+  resourceInformation: string // to be added to Patient Take-Home Summary
+  
+  // Referrals and Reason (Pages 3-4)
+  endocrinologist: boolean
+  endocrinologistNotes: string
+  primaryCarePhysician: boolean
+  primaryCarePhysicianNotes: string
+  dietitian: boolean
+  dietitianNotes: string
+  nurse: boolean
+  nurseNotes: string
+  familyPharmacist: boolean
+  familyPharmacistNotes: string
+  otherReferral: boolean
+  otherReferralNotes: string
+  additionalReferral: boolean
+  additionalReferralNotes: string
+  followUpDate: string // yyyy/mm/dd
+  purpose: string
+  referralInformation: string // to be added to Patient Take-Home Summary
+  
+  // Summary and Goals (Page 4)
+  summaryDiscussion: string
+  summaryToAddToTakeHome: string
+  reachingTheGoal: string
+  
+  // Prepared By
+  pharmacistFullName: string // Last Name, First Name
+  ocpNumber: string
+  dateOfDiabetesEducation: string // yyyy/mm/dd
+  appointmentTime: string
+  dateDocumentationCompleted: string // yyyy/mm/dd
+  copyRecordSentTo: boolean
+  copyRecordSentToDetails: string
+}
+
 // Main form data object - single source of truth
 export interface MedsCheckFormData {
   // Shared data across all forms
@@ -495,6 +777,8 @@ export interface MedsCheckFormData {
   form2: Form2Data
   form3: Form3Data
   form4: Form4Data
+  form5: Form5Data
+  form6: Form6Data
   
   // Metadata
   createdAt: string
@@ -844,6 +1128,259 @@ export const createEmptyFormData = (): MedsCheckFormData => ({
     appointmentTime: '',
     documentationCompletedDate: ''
   },
+  form5: {
+    // Patient Information
+    patientLastName: '',
+    patientFirstName: '',
+    patientDOB: '',
+    patientPhone: '',
+    pharmacyName: '',
+    
+    // Pharmacy Address
+    pharmacyUnitNumber: '',
+    pharmacyStreetNumber: '',
+    pharmacyStreetName: '',
+    pharmacyPOBox: '',
+    pharmacyCity: '',
+    pharmacyProvince: 'Ontario',
+    pharmacyPostalCode: '',
+    pharmacyPhone: '',
+    pharmacyFax: '',
+    pharmacyEmail: '',
+    
+    // Dynamic Sections
+    discussions: [],
+    goals: [],
+    actions: [],
+    resources: [],
+    referrals: [],
+    
+    // Prepared By
+    pharmacistFullName: '',
+    diabetesEducationDate: new Date().toISOString().split('T')[0],
+    patientSignature: '',
+    pharmacistSignature: ''
+  },
+  form6: {
+    // Patient Information
+    lastName: '',
+    firstName: '',
+    gender: '',
+    dateOfBirth: '',
+    healthCardNumber: '',
+    telephoneNumber: '',
+    datePatientSignedAcknowledgement: '',
+    
+    // Caregiver/Patient's Agent Information
+    caregiverLastName: '',
+    caregiverFirstName: '',
+    caregiverPhone: '',
+    caregiverEmail: '',
+    
+    // Primary Care Provider
+    providerLastName: '',
+    providerFirstName: '',
+    providerPhone: '',
+    providerFax: '',
+    providerEmail: '',
+    
+    // General Information
+    stageOfReadiness: '',
+    identifyPatientsGoals: '',
+    myGoals: '',
+    
+    // Medication Assessment
+    insulinUse: null,
+    oralHypoglycemic: null,
+    pharmacistComments: '',
+    
+    // Lab Values
+    hba1c: false,
+    hba1cValue: '',
+    bp: false,
+    bpValue: '',
+    fpg: false,
+    fpgValue: '',
+    tc: false,
+    hdlRatio: '',
+    ldl: '',
+    hdl: '',
+    tg: '',
+    
+    // Health Measurements
+    physicalActivity: false,
+    physicalActivityMinPerWeek: '',
+    weight: false,
+    weightValue: '',
+    height: '',
+    waistCircumference: '',
+    bmi: '',
+    cognitiveFunction: false,
+    cognitiveFunctionNotes: '',
+    medsCheckAnnualAvailable: false,
+    medsCheckAnnualNotes: '',
+    dtpIdentified: false,
+    dtpNotes: '',
+    tobacco: false,
+    tobaccoYes: false,
+    tobaccoNo: false,
+    tobaccoCigPerDay: '',
+    smokingCessation: false,
+    smokingCessationNotes: '',
+    alcoholDrugs: false,
+    alcoholDrugsType: '',
+    alcoholDrugsFrequency: '',
+    dietaryConcerns: false,
+    dietaryConcernsNotes: '',
+    otherHealth: false,
+    otherHealthNotes: '',
+    
+    // General Diabetes Education - Lifestyle
+    managementOfMedications: false,
+    managementOfMedicationsNotes: '',
+    footCareDiscussion: false,
+    footCareNotes: '',
+    screeningForDN: false,
+    screeningForDNNotes: '',
+    footConditionUlcers: false,
+    footConditionNotes: '',
+    properShoeFit: false,
+    properShoeFitNotes: '',
+    bpMonitoring: false,
+    bpMonitoringNotes: '',
+    cvRiskFactors: false,
+    cvRiskFactorsNotes: '',
+    mentalHealthAssessment: false,
+    mentalHealthNotes: '',
+    erectileDysfunction: false,
+    erectileDysfunctionNotes: '',
+    lifestyle: false,
+    lifestyleDiet: false,
+    lifestyleDietNotes: '',
+    lifestyleStressReduction: false,
+    lifestyleStressReductionNotes: '',
+    lifestyleExercise: false,
+    lifestyleExerciseNotes: '',
+    eyeHealth: false,
+    eyeHealthNotes: '',
+    dentalHygiene: false,
+    dentalHygieneNotes: '',
+    immunizations: false,
+    immunizationsInfluenza: false,
+    immunizationsInfluenzaNotes: '',
+    immunizationsPneumococcal: false,
+    immunizationsPneumococcalNotes: '',
+    immunizationsOther: false,
+    immunizationsOtherNotes: '',
+    drivingGuidelines: false,
+    drivingGuidelinesNotes: '',
+    travellingWithDiabetes: false,
+    travellingWithDiabetesNotes: '',
+    
+    // Self-Monitoring of Blood Glucose
+    meterTraining: false,
+    meterTrainingNotes: '',
+    testingFrequency: false,
+    testingFrequencyNotes: '',
+    recordingResults: false,
+    recordingResultsNotes: '',
+    identificationPatterns: false,
+    identificationPatternsNotes: '',
+    preventionHypoglycemia: false,
+    preventionHypoglycemiaNotes: '',
+    properMedicationHandling: false,
+    properMedicationHandlingNotes: '',
+    trainingDisposal: false,
+    trainingDisposalNotes: '',
+    sickDaysManagement: false,
+    sickDaysManagementNotes: '',
+    individualizedBGTargets: false,
+    individualizedBGTargetsNotes: '',
+    otherBloodGlucose: false,
+    otherBloodGlucoseNotes: '',
+    
+    // Specialty Training
+    insulinTypes: false,
+    insulinTypesNotes: '',
+    penSyringeHandling: false,
+    penSyringeHandlingNotes: '',
+    sitePreparation: false,
+    sitePreparationNotes: '',
+    injectionTrainingGLP1: false,
+    injectionTrainingGLP1Notes: '',
+    properInjectionTechnique: false,
+    properInjectionTechniqueNotes: '',
+    patientDemonstratedUse: false,
+    patientDemonstratedUseNotes: '',
+    dosageAdjustments: false,
+    dosageAdjustmentsNotes: '',
+    missedDoses: false,
+    missedDosesNotes: '',
+    reviewCarbohydrate: false,
+    reviewCarbohydrateNotes: '',
+    emergencySickDay: false,
+    emergencySickDayNotes: '',
+    alcoholTobaccoInsulin: false,
+    alcoholTobaccoInsulinNotes: '',
+    updatedInsulinRegimen: false,
+    insulinType1: '',
+    insulinType1Am: '',
+    insulinType1Noon: '',
+    insulinType1Supper: '',
+    insulinType2: '',
+    insulinType2HS: '',
+    insulinType2Other: '',
+    otherSpecialty: false,
+    otherSpecialtyNotes: '',
+    otherComplications: false,
+    otherComplicationsNotes: '',
+    
+    // Resources Provided
+    diabetesPassport: false,
+    diabetesPassportNotes: '',
+    sickDaysManagementPlan: false,
+    sickDaysManagementPlanNotes: '',
+    afterHoursSupport: false,
+    afterHoursSupportNotes: '',
+    directoryResources: false,
+    directoryResourcesNotes: '',
+    otherMaterialGiven: false,
+    otherMaterialGivenNotes: '',
+    resourceInformation: '',
+    
+    // Referrals and Reason
+    endocrinologist: false,
+    endocrinologistNotes: '',
+    primaryCarePhysician: false,
+    primaryCarePhysicianNotes: '',
+    dietitian: false,
+    dietitianNotes: '',
+    nurse: false,
+    nurseNotes: '',
+    familyPharmacist: false,
+    familyPharmacistNotes: '',
+    otherReferral: false,
+    otherReferralNotes: '',
+    additionalReferral: false,
+    additionalReferralNotes: '',
+    followUpDate: '',
+    purpose: '',
+    referralInformation: '',
+    
+    // Summary and Goals
+    summaryDiscussion: '',
+    summaryToAddToTakeHome: '',
+    reachingTheGoal: '',
+    
+    // Prepared By
+    pharmacistFullName: '',
+    ocpNumber: '',
+    dateOfDiabetesEducation: new Date().toISOString().split('T')[0],
+    appointmentTime: '',
+    dateDocumentationCompleted: '',
+    copyRecordSentTo: false,
+    copyRecordSentToDetails: ''
+  },
   createdAt: new Date().toISOString(),
   updatedAt: new Date().toISOString(),
   version: '1.0.0'
@@ -953,4 +1490,30 @@ export const createEmptyForm4HealthcareProvider = (): Form4HealthcareProvider =>
   lastName: '',
   firstName: '',
   specialty: ''
+})
+
+// Form 5 helper functions
+export const createEmptyForm5Discussion = (): Form5Discussion => ({
+  id: generateId(),
+  content: ''
+})
+
+export const createEmptyForm5Goal = (): Form5Goal => ({
+  id: generateId(),
+  content: ''
+})
+
+export const createEmptyForm5Action = (): Form5Action => ({
+  id: generateId(),
+  content: ''
+})
+
+export const createEmptyForm5Resource = (): Form5Resource => ({
+  id: generateId(),
+  content: ''
+})
+
+export const createEmptyForm5Referral = (): Form5Referral => ({
+  id: generateId(),
+  content: ''
 })

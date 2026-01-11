@@ -63,6 +63,7 @@ const styles = StyleSheet.create({
   value: {
     flex: 1,
     fontSize: 11,
+    color: '#00008B',
     backgroundColor: '#E8EEF7',
     padding: 4,
     minHeight: 16
@@ -70,6 +71,7 @@ const styles = StyleSheet.create({
   valueHalf: {
     flex: 1,
     fontSize: 11,
+    color: '#00008B',
     backgroundColor: '#E8EEF7',
     padding: 4,
     minHeight: 16,
@@ -162,6 +164,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   inlineValue: {
+    color: '#00008B',
     backgroundColor: '#E8EEF7',
     padding: 2,
     paddingHorizontal: 4,

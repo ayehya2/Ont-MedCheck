@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { FormDataProvider } from '@/context/FormDataContext'
 import { PDFFormattingProvider } from '@/context/PDFFormattingContext'
 import { Header } from '@/components/layout/Header'
@@ -6,21 +6,12 @@ import { Footer } from '@/components/layout/Footer'
 import { InputSection } from '@/components/InputSection'
 import { LeftPanel } from '@/components/LeftPanel'
 import { RightPanel } from '@/components/RightPanel'
-import { FormSection } from '@/components/ContinuousFormView'
 import { LandingPage } from '@/pages/LandingPage'
 
 // Key for storing landing page state in sessionStorage
 const SHOW_APP_KEY = 'medscheck_show_app'
 
 function MainApp() {
-  // State for active form section (synced from scroll position)
-  const [activeSection, setActiveSection] = useState<FormSection>(1)
-  
-  // Callback for when visible section changes (from scroll)
-  const handleVisibleSectionChange = useCallback((section: FormSection) => {
-    setActiveSection(section)
-  }, [])
-  
   // State for input section collapse
   const [isInputCollapsed, setIsInputCollapsed] = useState(false)
   
@@ -75,15 +66,12 @@ function MainApp() {
     e.preventDefault()
 
     // Calculate new height based on mouse Y position from bottom of viewport
-    // The handle is at the TOP of the input section, so:
-    // - Moving mouse DOWN (higher clientY) should DECREASE height (make section shorter)
-    // - Moving mouse UP (lower clientY) should INCREASE height (make section taller)
     const newHeight = window.innerHeight - e.clientY
 
     // Clamp between 200px and 800px
     const clampedHeight = Math.max(200, Math.min(800, newHeight))
 
-    // Use requestAnimationFrame for smoother updates
+    // Use requestAnimationFrame for smoother updates (same as horizontal)
     requestAnimationFrame(() => {
       setClinicalNotesHeight(clampedHeight)
     })
@@ -141,7 +129,7 @@ function MainApp() {
           className="border-r border-border flex flex-col overflow-hidden"
           style={{ width: `${leftPanelWidth}%` }}
         >
-          <LeftPanel onVisibleSectionChange={handleVisibleSectionChange} />
+          <LeftPanel />
           
           {/* Vertical Resize Handle - Above Clinical Notes */}
           <div
@@ -189,7 +177,7 @@ function MainApp() {
 
         {/* Right Panel - Remaining width, contains PDF preview */}
         <div className="flex-1 overflow-hidden">
-          <RightPanel activeSection={activeSection} />
+          <RightPanel />
         </div>
       </main>
 

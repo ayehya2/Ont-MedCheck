@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
 })
 
 // Note: @react-pdf/renderer doesn't support PDF bookmarks/outlines natively
-// This consolidated PDF includes all 4 forms with divider pages for easy navigation
+// This consolidated PDF includes all 6 forms with divider pages for easy navigation
 export function ConsolidatedPDF({ data }: ConsolidatedPDFProps) {
   const patientName = data.form1.patientName || 
                      `${data.form2.patientFirstName} ${data.form2.patientLastName}`.trim() ||
@@ -76,6 +76,8 @@ export function ConsolidatedPDF({ data }: ConsolidatedPDFProps) {
           <Text style={{fontSize: 11, marginBottom: 3}}>• Form 2: Patient Acknowledgement</Text>
           <Text style={{fontSize: 11, marginBottom: 3}}>• Form 3: Personal Medication Record</Text>
           <Text style={{fontSize: 11, marginBottom: 3}}>• Form 4: Pharmacist Worksheet</Text>
+          <Text style={{fontSize: 11, marginBottom: 3}}>• Form 5: Diabetes Education Patient Take-Home Summary</Text>
+          <Text style={{fontSize: 11, marginBottom: 3}}>• Form 6: Patient Take-Home Summary</Text>
         </View>
         <Text style={styles.coverDate}>
           Generated: {new Date().toLocaleString('en-CA')}
@@ -87,7 +89,7 @@ export function ConsolidatedPDF({ data }: ConsolidatedPDFProps) {
       {/* This is a limitation of @react-pdf/renderer - it doesn't support nested Documents */}
       {/* or true PDF bookmarks */}
       
-      {/* Workaround: Users download all 4 forms separately with sequential naming */}
+      {/* Workaround: Users download all forms separately with sequential naming */}
       {/* This provides organization through file naming rather than PDF bookmarks */}
       
       <Page size="LETTER" style={styles.coverPage}>
@@ -95,7 +97,7 @@ export function ConsolidatedPDF({ data }: ConsolidatedPDFProps) {
           Note: This consolidated PDF feature requires restructuring the form components.
         </Text>
         <Text style={{fontSize: 12, textAlign: 'center', marginTop: 20, color: '#666'}}>
-          Currently, please use "Download All" to get all 4 forms as separate PDFs.
+          Currently, please use "Download All" to get all 6 forms as separate PDFs.
         </Text>
         <Text style={{fontSize: 12, textAlign: 'center', marginTop: 10, color: '#666'}}>
           They will be named sequentially for easy organization.
