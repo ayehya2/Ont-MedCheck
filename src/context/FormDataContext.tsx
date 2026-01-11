@@ -468,8 +468,10 @@ export function FormDataProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   const clearAllData = useCallback(() => {
-    dispatch({ type: 'CLEAR_ALL' })
     localStorage.removeItem(STORAGE_KEY)
+    dispatch({ type: 'CLEAR_ALL' })
+    // Reload the page to ensure a fresh start
+    window.location.reload()
   }, [])
 
   const value: FormDataContextValue = {
