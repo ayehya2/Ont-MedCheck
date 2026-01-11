@@ -88,7 +88,8 @@ const styles = StyleSheet.create({
     borderBottomColor: '#999'
   },
   cellValue: {
-    fontSize: 9,    color: '#00008B',    padding: 2,
+    fontSize: 9,
+    padding: 2,
     backgroundColor: '#E8EEF7',
     minHeight: 12
   },

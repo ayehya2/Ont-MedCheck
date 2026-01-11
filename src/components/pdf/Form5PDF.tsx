@@ -8,9 +8,9 @@ interface Form5PDFProps {
 
 const styles = StyleSheet.create({
   page: {
-    padding: 20,
-    fontSize: 9,
-    fontFamily: 'Helvetica',
+    padding: 14,
+    fontSize: 8,
+    fontFamily: 'Times-Roman',
     lineHeight: 1.2,
     color: '#000000',
     backgroundColor: '#FFFFFF'
@@ -19,84 +19,167 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 8,
-    borderBottomWidth: 2,
+    marginBottom: 3,
+    borderBottomWidth: 1,
     borderBottomColor: '#000',
-    paddingBottom: 4
+    paddingBottom: 2
+  },
+  logo: {
+    height: 25,
+    width: 70,
+    objectFit: 'contain'
+  },
+  medsCheckLogoImage: {
+    height: 25,
+    width: 100,
+    objectFit: 'contain'
   },
   title: {
-    fontSize: 13,
-    fontFamily: 'Helvetica-Bold',
-    textAlign: 'center',
+    fontSize: 15,
+    fontFamily: 'Times-Bold',
     marginBottom: 8,
     marginTop: 4
   },
+  // Section Headers - blue background matching government form
   sectionHeader: {
-    fontSize: 10,
-    fontFamily: 'Helvetica-Bold',
-    backgroundColor: '#E0E0E0',
-    padding: 4,
-    marginTop: 6,
-    marginBottom: 0,
-    borderWidth: 1,
-    borderColor: '#000'
+    backgroundColor: '#D0D8E8',
+    padding: 3,
+    fontSize: 8,
+    fontFamily: 'Times-Bold',
+    marginTop: 2,
+    marginBottom: 1
   },
+  // Table structure
   table: {
-    width: '100%',
-    borderWidth: 1,
-    borderColor: '#000',
-    marginBottom: 0
+    borderWidth: 0.5,
+    borderColor: '#999',
+    marginBottom: 3
   },
   tableRow: {
     flexDirection: 'row',
-    borderBottomWidth: 1,
-    borderBottomColor: '#000',
-    minHeight: 20
+    borderWidth: 0.5,
+    borderColor: '#999',
+    borderTopWidth: 0,
+    minHeight: 14
+  },
+  tableRowFirst: {
+    flexDirection: 'row',
+    borderWidth: 0.5,
+    borderColor: '#999',
+    minHeight: 14
   },
   tableRowLast: {
     flexDirection: 'row',
-    minHeight: 20
+    borderWidth: 0.5,
+    borderColor: '#999',
+    borderTopWidth: 0,
+    minHeight: 14
   },
   tableCol: {
-    borderRightWidth: 1,
-    borderRightColor: '#000',
-    padding: 3,
-    justifyContent: 'center'
+    borderRightWidth: 0.5,
+    borderRightColor: '#999',
+    padding: 2
   },
   tableColLast: {
-    padding: 3,
-    justifyContent: 'center'
+    padding: 2
+  },
+  // Cell styling matching Forms 1-4
+  cellLabel: {
+    fontSize: 7,
+    fontFamily: 'Times-Roman',
+    backgroundColor: '#F0F0F0',
+    padding: 2,
+    borderBottomWidth: 0.5,
+    borderBottomColor: '#999'
+  },
+  cellValue: {
+    fontSize: 9,
+    padding: 2,
+    backgroundColor: '#E8EEF7',
+    minHeight: 12
   },
   tableCellLabel: {
     fontSize: 8,
-    fontFamily: 'Helvetica-Bold'
+    fontFamily: 'Times-Roman',
+    padding: 2,
+    backgroundColor: '#FFFFFF'
   },
   tableCellValue: {
-    fontSize: 8,
+    fontSize: 9,
     color: '#00008B',
+    padding: 3,
     minHeight: 16,
-    backgroundColor: '#E8F0FE'
+    backgroundColor: '#E8EEF7'
   },
+  // Dynamic sections
   dynamicSection: {
     marginTop: 6,
     marginBottom: 0,
-    borderWidth: 1,
+    borderWidth: 0.5,
     borderColor: '#000'
   },
   dynamicSectionHeader: {
     fontSize: 9,
-    fontFamily: 'Helvetica-Bold',
-    backgroundColor: '#E0E0E0',
+    fontFamily: 'Times-Bold',
+    backgroundColor: '#D0D8E8',
     padding: 3,
-    borderBottomWidth: 1,
+    borderBottomWidth: 0.5,
     borderBottomColor: '#000'
   },
   dynamicSectionContent: {
-    fontSize: 8,
+    fontSize: 9,
     color: '#00008B',
     padding: 3,
     minHeight: 40,
-    backgroundColor: '#E8F0FE'
+    backgroundColor: '#E8EEF7'
+  },
+  // Footer styling
+  footer: {
+    position: 'absolute',
+    bottom: 18,
+    left: 18,
+    right: 18,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    fontSize: 7,
+    borderTopWidth: 0.5,
+    borderTopColor: '#999',
+    paddingTop: 4
+  },
+  // Signature styling
+  signatureSection: {
+    flexDirection: 'row',
+    marginTop: 12,
+    borderWidth: 0.5,
+    borderColor: '#000'
+  },
+  signatureBox: {
+    flex: 1,
+    borderRightWidth: 0.5,
+    borderRightColor: '#000',
+    padding: 4,
+    minHeight: 30
+  },
+  signatureBoxLast: {
+    flex: 1,
+    padding: 4,
+    minHeight: 30
+  },
+  signatureLabel: {
+    fontSize: 8,
+    fontFamily: 'Times-Bold',
+    marginBottom: 2
+  },
+  signatureLine: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#000',
+    minHeight: 20,
+    justifyContent: 'flex-end',
+    paddingBottom: 2
+  },
+  signatureText: {
+    fontSize: 9,
+    color: '#00008B'
   },
   buttonRow: {
     flexDirection: 'row',
@@ -108,7 +191,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#00BCD4',
     color: '#FFF',
     fontSize: 8,
-    fontFamily: 'Helvetica-Bold',
+    fontFamily: 'Times-Bold',
     padding: 4,
     textAlign: 'center',
     borderRadius: 2
@@ -137,11 +220,6 @@ const styles = StyleSheet.create({
     width: '50%',
     padding: 3,
     minHeight: 60
-  },
-  signatureLabel: {
-    fontSize: 8,
-    fontFamily: 'Helvetica-Bold',
-    marginBottom: 2
   }
 })
 
@@ -380,10 +458,10 @@ export function Form5PDF({ data }: Form5PDFProps) {
         </View>
 
         {/* Footer */}
-        <View style={{ marginTop: 10, paddingTop: 6, borderTopWidth: 1, borderTopColor: '#CCC' }}>
-          <Text style={{ fontSize: 7, textAlign: 'center' }}>
-            4970-47E (2022/11)     © King's Printer for Ontario, 2022     Disponible en français     Page 1 of 1
-          </Text>
+        <View style={styles.footer}>
+          <Text>4970-47E (2022/11)   © King's Printer for Ontario, 2022</Text>
+          <Text>Disponible en français</Text>
+          <Text>Page 1 of 1</Text>
         </View>
       </Page>
     </Document>

@@ -3,76 +3,115 @@ import { MedsCheckFormData } from '../../types/forms'
 
 const styles = StyleSheet.create({
   page: {
-    padding: 30,
-    fontSize: 9,
-    fontFamily: 'Helvetica'
+    padding: 14,
+    fontSize: 8,
+    fontFamily: 'Times-Roman',
+    lineHeight: 1.2,
+    color: '#000000',
+    backgroundColor: '#FFFFFF'
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 8,
-    paddingBottom: 6,
+    marginBottom: 3,
+    paddingBottom: 2,
     borderBottomWidth: 1,
     borderBottomColor: '#000'
   },
+  logo: {
+    height: 25,
+    width: 70,
+    objectFit: 'contain'
+  },
+  medsCheckLogoImage: {
+    height: 25,
+    width: 100,
+    objectFit: 'contain'
+  },
   title: {
-    fontSize: 14,
-    fontFamily: 'Helvetica-Bold',
-    textAlign: 'center',
+    fontSize: 15,
+    fontFamily: 'Times-Bold',
     marginBottom: 8
   },
   note: {
-    fontSize: 7,
+    fontSize: 8,
     marginBottom: 10,
     padding: 6,
-    backgroundColor: '#F0F0F0',
-    borderWidth: 1,
-    borderColor: '#CCC'
-  },
-  sectionHeader: {
-    fontSize: 10,
-    fontFamily: 'Helvetica-Bold',
-    backgroundColor: '#E0E0E0',
-    padding: 4,
-    marginTop: 6,
-    marginBottom: 4,
-    borderWidth: 1,
+    backgroundColor: '#E8EEF7',
+    borderWidth: 0.5,
     borderColor: '#000'
   },
+  // Section Headers - blue background matching government form
+  sectionHeader: {
+    backgroundColor: '#D0D8E8',
+    padding: 3,
+    fontSize: 8,
+    fontFamily: 'Times-Bold',
+    marginTop: 2,
+    marginBottom: 1
+  },
+  // Table structure
   table: {
-    borderWidth: 1,
-    borderColor: '#000',
-    marginBottom: 6
+    borderWidth: 0.5,
+    borderColor: '#999',
+    marginBottom: 3
   },
   tableRow: {
     flexDirection: 'row',
-    borderBottomWidth: 1,
-    borderBottomColor: '#000'
+    borderWidth: 0.5,
+    borderColor: '#999',
+    borderTopWidth: 0
+  },
+  tableRowFirst: {
+    flexDirection: 'row',
+    borderWidth: 0.5,
+    borderColor: '#999'
   },
   tableRowLast: {
-    flexDirection: 'row'
+    flexDirection: 'row',
+    borderWidth: 0.5,
+    borderColor: '#999',
+    borderTopWidth: 0
   },
   tableCol: {
-    borderRightWidth: 1,
-    borderRightColor: '#000',
-    padding: 3
+    borderRightWidth: 0.5,
+    borderRightColor: '#999',
+    padding: 2
   },
   tableColLast: {
-    padding: 3
+    padding: 2
+  },
+  // Cell styling matching Forms 1-4
+  cellLabel: {
+    fontSize: 7,
+    fontFamily: 'Times-Roman',
+    backgroundColor: '#F0F0F0',
+    padding: 2,
+    borderBottomWidth: 0.5,
+    borderBottomColor: '#999'
+  },
+  cellValue: {
+    fontSize: 9,
+    padding: 2,
+    backgroundColor: '#E8EEF7',
+    minHeight: 12
   },
   tableCellLabel: {
-    fontSize: 7,
-    fontFamily: 'Helvetica-Bold',
-    marginBottom: 1
+    fontSize: 8,
+    fontFamily: 'Times-Roman',
+    marginBottom: 1,
+    padding: 2,
+    backgroundColor: '#FFFFFF'
   },
   tableCellValue: {
     fontSize: 9,
     color: '#00008B',
-    backgroundColor: '#E8F0FE',
+    backgroundColor: '#E8EEF7',
     padding: 2,
     minHeight: 14
   },
+  // Checkbox styling
   checkboxRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -82,14 +121,14 @@ const styles = StyleSheet.create({
   checkbox: {
     width: 8,
     height: 8,
-    borderWidth: 1,
+    borderWidth: 0.5,
     borderColor: '#000',
     marginRight: 4
   },
   checkboxChecked: {
     width: 8,
     height: 8,
-    borderWidth: 1,
+    borderWidth: 0.5,
     borderColor: '#000',
     backgroundColor: '#000',
     marginRight: 4
@@ -107,23 +146,32 @@ const styles = StyleSheet.create({
     flex: 2
   },
   glossary: {
-    fontSize: 6,
+    marginTop: 8,
+    marginBottom: 4
+  },
+  glossaryTitle: {
+    fontSize: 8,
+    fontFamily: 'Times-Bold',
+    marginBottom: 4
+  },
+  glossaryText: {
+    fontSize: 7,
+    fontFamily: 'Times-Roman',
+    backgroundColor: '#F0F0F0',
     padding: 4,
-    backgroundColor: '#F8F8F8',
-    borderWidth: 1,
-    borderColor: '#CCC',
-    marginTop: 6
+    lineHeight: 1.3
   },
   footer: {
     position: 'absolute',
-    bottom: 20,
-    left: 30,
-    right: 30,
+    bottom: 18,
+    left: 18,
+    right: 18,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     fontSize: 7,
-    textAlign: 'center',
-    paddingTop: 4,
-    borderTopWidth: 1,
-    borderTopColor: '#CCC'
+    borderTopWidth: 0.5,
+    borderTopColor: '#999',
+    paddingTop: 4
   }
 })
 
@@ -140,19 +188,21 @@ export function Form6PDF({ data }: Form6PDFProps) {
       <Page size="LETTER" style={styles.page}>
         {/* Header with logos */}
         <View style={styles.header}>
-          <Image src='/ontario-logo.png' style={{ height: 28, width: 80, objectFit: 'contain' }} />
-          <Text style={{ fontSize: 10, fontFamily: 'Helvetica-Bold' }}>Ministry of Health{'\n'}and Long-Term Care</Text>
-          <Image src='/medscheck-logo.png' style={{ height: 28, width: 120, objectFit: 'contain' }} />
+          <Image src='/ontario-logo.png' style={styles.logo} />
+          <Text style={{ fontSize: 10, fontFamily: 'Times-Bold', textAlign: 'center' }}>Ministry of Health{'\n'}and Long-Term Care</Text>
+          <Image src='/medscheck-logo.png' style={styles.medsCheckLogoImage} />
         </View>
 
         {/* Title */}
         <Text style={styles.title}>Diabetes Education Checklist</Text>
 
         {/* Note */}
-        <Text style={styles.note}>
-          This document represents a list of the different subjects including insulin education if applicable to be covered during MedsCheck diabetes education sessions, and should be addressed according to the patient's needs, learning capabilities and the pharmacist availability. This education is considered specialty training. Pharmacists providing this service are required to have adequate knowledge of diabetes education through a professional program that is CCCEP approved or a Certified Diabetes Educator designation.{'\n\n'}
-          Note** - See glossary for terms
-        </Text>
+        <View style={{ backgroundColor: '#E8F4FD', padding: 6, marginBottom: 8, borderWidth: 0.5, borderColor: '#000' }}>
+          <Text style={{ fontSize: 8, fontFamily: 'Times-Roman', lineHeight: 1.3 }}>
+            This document represents a list of the different subjects including insulin education if applicable to be covered during MedsCheck diabetes education sessions, and should be addressed according to the patient's needs, learning capabilities and the pharmacist availability. This education is considered specialty training. Pharmacists providing this service are required to have adequate knowledge of diabetes education through a professional program that is CCCEP approved or a Certified Diabetes Educator designation.
+          </Text>
+          <Text style={{ fontSize: 8, fontFamily: 'Times-Bold', marginTop: 4 }}>Note** - See glossary for terms</Text>
+        </View>
 
         {/* Patient Information */}
         <Text style={styles.sectionHeader}>Patient Information</Text>
@@ -488,7 +538,7 @@ export function Form6PDF({ data }: Form6PDFProps) {
           {/* Lifestyle with sub-items */}
           <View style={styles.checkboxRow}>
             <View style={form6.lifestyle ? styles.checkboxChecked : styles.checkbox} />
-            <Text style={[styles.checkboxLabel, { fontFamily: 'Helvetica-Bold' }]}>Lifestyle:</Text>
+            <Text style={[styles.checkboxLabel, { fontFamily: 'Times-Bold' }]}>Lifestyle:</Text>
           </View>
           {form6.lifestyle && (
             <View style={{ paddingLeft: 20 }}>
@@ -524,7 +574,7 @@ export function Form6PDF({ data }: Form6PDFProps) {
           {/* Immunizations with sub-items */}
           <View style={styles.checkboxRow}>
             <View style={form6.immunizations ? styles.checkboxChecked : styles.checkbox} />
-            <Text style={[styles.checkboxLabel, { fontFamily: 'Helvetica-Bold' }]}>Immunizations:</Text>
+            <Text style={[styles.checkboxLabel, { fontFamily: 'Times-Bold' }]}>Immunizations:</Text>
           </View>
           {form6.immunizations && (
             <View style={{ paddingLeft: 20 }}>
@@ -622,7 +672,7 @@ export function Form6PDF({ data }: Form6PDFProps) {
           {/* Updated Insulin Regimen */}
           <View style={styles.checkboxRow}>
             <View style={form6.updatedInsulinRegimen ? styles.checkboxChecked : styles.checkbox} />
-            <Text style={[styles.checkboxLabel, { fontFamily: 'Helvetica-Bold' }]}>Updated Insulin Regimen:</Text>
+            <Text style={[styles.checkboxLabel, { fontFamily: 'Times-Bold' }]}>Updated Insulin Regimen:</Text>
           </View>
           {form6.updatedInsulinRegimen && (
             <View style={{ paddingLeft: 20, marginBottom: 4 }}>
@@ -849,16 +899,21 @@ export function Form6PDF({ data }: Form6PDFProps) {
         </View>
 
         {/* Glossary */}
-        <Text style={styles.glossary}>
-          * CV= cardiovascular   DN- diabetic neuropathy   OTC= over-the-counter Rx = prescription   BP= blood pressure   HbA1C= hemoglobin A1C{'\n'}
-          BMI= body mass index   BG = blood glucose   FPG= fasting plasma glucose  DOB=date of birth  GLP-1= Glucagon-like peptide-1{'\n'}
-          TG=triglyceride   DTP = drug therapy problem  TC= total cholesterol HDL or LDL= high or low density lipoprotein
-        </Text>
+        <View style={styles.glossary}>
+          <Text style={styles.glossaryTitle}>Glossary</Text>
+          <Text style={styles.glossaryText}>
+            * CV= cardiovascular   DN- diabetic neuropathy   OTC= over-the-counter Rx = prescription   BP= blood pressure   HbA1C= hemoglobin A1C{'\n'}
+            BMI= body mass index   BG = blood glucose   FPG= fasting plasma glucose  DOB=date of birth  GLP-1= Glucagon-like peptide-1{'\n'}
+            TG=triglyceride   DTP = drug therapy problem  TC= total cholesterol HDL or LDL= high or low density lipoprotein
+          </Text>
+        </View>
 
         {/* Footer */}
-        <Text style={styles.footer}>
-          4969-47E (2022/11)     © King's Printer for Ontario, 2022     Disponible en français     Page 4 of 4
-        </Text>
+        <View style={styles.footer}>
+          <Text>4969-47E (2022/11)   © King's Printer for Ontario, 2022</Text>
+          <Text>Disponible en français</Text>
+          <Text>Page 4 of 4</Text>
+        </View>
       </Page>
     </Document>
   )
